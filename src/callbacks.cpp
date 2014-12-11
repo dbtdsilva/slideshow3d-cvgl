@@ -19,13 +19,12 @@
 
 using namespace std;
 
-void produceModelsShading(GraphicModelChess *obj)
+void produceModelsShading(GraphicModel *obj)
 {
     glEnableVertexAttribArray(attribute_coord3d);
     glEnableVertexAttribArray(attribute_texcoord);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, obj->textureID);
-    /* Caracteristicas do array de coordenadas */
     float *coordenadas = new GLfloat[obj->arrayVertices.size() * sizeof(GLfloat)];
 
     glVertexAttribPointer(attribute_coord3d,        // attribute
@@ -74,7 +73,7 @@ void myDisplay(void)
 void myKeyboard(unsigned char key, int x, int y)
 {
     int i;
-    GraphicModelChess *obj;
+    GraphicModel *obj;
     switch (key)
     {
     case 'Q' :

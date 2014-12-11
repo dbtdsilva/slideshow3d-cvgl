@@ -5,12 +5,12 @@
  *
  */
 
-#include "GraphicModelChess.hpp"
+#include "graphicmodel.hpp"
 #include <iostream>
 using namespace std;
 
-GraphicModelChess::GraphicModelChess() {
+GraphicModel::GraphicModel() {
 }
 
-GraphicModelChess::~GraphicModelChess() {
+GraphicModel::~GraphicModel() {
 }

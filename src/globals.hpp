@@ -16,7 +16,7 @@
 #include <GL/freeglut.h>
 #include <string>
 #include "utils/mathUtils.hpp"
-#include "GraphicModelChess.hpp"
+#include "graphicmodel.hpp"
 
 using namespace std;
 
@@ -32,9 +32,9 @@ extern projCoord proj;
 extern int windowHandle;
 extern GLuint programaGLSL;
 extern GLuint vs, fs;
-extern GLint attribute_coord3d, attribute_normal3d, attribute_texcoord;
+extern GLint attribute_coord3d, attribute_texcoord;
 extern mat4x4 matrizProj, matrizModelView;
 
-extern GraphicModelChess *skybox;
+extern GraphicModel *skybox;
 extern bool animationActive;
 #endif

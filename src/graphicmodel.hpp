@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef GRAPHICMODELCHESS_H
-#define GRAPHICMODELCHESS_H
+#ifndef GRAPHICMODEL_H
+#define GRAPHICMODEL_H
 
 #include <string>
 #include <GL/glew.h>
@@ -19,23 +19,16 @@
 
 using namespace cv;
 
-class GraphicModelChess
-{
+class GraphicModel {
 public:
     /* Coordenadas dos vertices */
-    GraphicModelChess();
-    ~GraphicModelChess();
+    GraphicModel();
+    ~GraphicModel();
 
     int numVertices;
     vector<float> arrayVertices;
     vector<float> arrayTextures;
-    vector<float> arrayNormais;
     GLuint textureID;
-    /* Propriedades do material */
-    float kAmb[4];
-    float kDif[4];
-    float kEsp[4];
-    float coefPhong;
     /* Parametros das transformacoes */
     Point3_<float> desl;
     Point3_<float> anguloRot;

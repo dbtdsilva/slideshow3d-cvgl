@@ -15,8 +15,8 @@ projCoord proj;
 int windowHandle;
 GLuint programaGLSL;
 GLuint vs, fs;
-GLint attribute_coord3d, attribute_normal3d, attribute_texcoord;
+GLint attribute_coord3d, attribute_texcoord;
 mat4x4 matrizProj, matrizModelView;
 
-GraphicModelChess * skybox;
+GraphicModel * skybox;
 bool animationActive;

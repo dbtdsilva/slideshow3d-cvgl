@@ -1,7 +1,7 @@
-HEADERS		= 	callbacks.hpp init.hpp GraphicModelChess.hpp globals.hpp \
+HEADERS		= 	callbacks.hpp init.hpp graphicmodel.hpp globals.hpp \
 				utils/mathUtils.hpp shaders/shaders.hpp
 				
-SOURCES		=	project60337.cpp globals.cpp callbacks.cpp GraphicModelChess.cpp init.cpp models.cpp \
+SOURCES		=	project60337.cpp globals.cpp callbacks.cpp graphicmodel.cpp init.cpp models.cpp \
 				shaders/shaders.cpp utils/mathUtils.cpp
 
 INCLUDEPATH     = 
