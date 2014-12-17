@@ -21,7 +21,7 @@
 using namespace std;
 using namespace cv;
 
-GLuint loadBMPImage(string imagepath) {
+GLuint loadImage(string imagepath, Mat *image) {
 	// Create one OpenGL texture
 	GLuint textureID = 0;
 	glGenTextures(1, &textureID);
@@ -29,13 +29,13 @@ GLuint loadBMPImage(string imagepath) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	Mat image = cv::imread(imagepath, CV_LOAD_IMAGE_UNCHANGED);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, image.cols, image.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image.data);
+	*image = cv::imread(imagepath, CV_LOAD_IMAGE_UNCHANGED);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image->data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	return textureID;
 }
 void lerVerticesDeFicheiro(string nome, int *numVertices, vector<float> *arrayVertices, 
-										vector<float> *arrayNormais, vector<float> *arrayTextures)
+										vector<float> *arrayTextures, vector<float> *arrayNormais)
 {
 	std::vector<Point3_<float> > vertices, normalVector, faces, facesNormals;
 	std::vector<Point_<float> > textureVector, facesTextures;
@@ -91,10 +91,11 @@ void lerVerticesDeFicheiro(string nome, int *numVertices, vector<float> *arrayVe
 		tmpN = facesNormals.at(i);
 		tmpT = facesTextures.at(i);
 
-		arrayNormais->push_back(tmpN.x);
-		arrayNormais->push_back(tmpN.y);
-		arrayNormais->push_back(tmpN.z);
-
+		if (arrayNormais != NULL) {
+			arrayNormais->push_back(tmpN.x);
+			arrayNormais->push_back(tmpN.y);
+			arrayNormais->push_back(tmpN.z);
+		}
 		arrayTextures->push_back(tmpT.x);
 		arrayTextures->push_back(tmpT.y);
 

@@ -27,7 +27,9 @@ public:
 
     int numVertices;
     vector<float> arrayVertices;
+    vector<float> arrayNormais;
     vector<float> arrayTextures;
+    Mat image;
     GLuint textureID;
     /* Parametros das transformacoes */
     Point3_<float> desl;

@@ -66,7 +66,8 @@ void myDisplay(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(programaGLSL);
-    //produceModelsShading(skybox);
+    for (int i = 0; i < ss_images.size(); i++) 
+        produceModelsShading(ss_images[i]);
     glutSwapBuffers();
 }
 
@@ -125,13 +126,13 @@ void mySpecialKeys(int key, int x, int y)
 void onMouse(int button, int state, int x, int y)
 {
     if (button == 3) {
-        // Scroll up
+        Scale(&matrizProj, 1.02, 1.02, 1.02);
         glutPostRedisplay();
         return;
     }
 
     if (button == 4){
-        // Scroll down
+        Scale(&matrizProj, 0.98, 0.98, 0.98);
         glutPostRedisplay();
         return;
     }

@@ -16,7 +16,7 @@
 #include <GL/freeglut.h>
 #include "globals.hpp"
 #include "utils/mathUtils.hpp"
-#include "models.hpp"
+#include "models/models.hpp"
 #include <iostream>
 
 void inicializarEstado(void)
@@ -69,38 +69,26 @@ void inicializarPlanoProjeccao(void)
 
 void inicializarModelos(void)
 {
-    /*GraphicModelChess obj;
-    skybox = new GraphicModelChess();
-    lerVerticesDeFicheiro(projectPath + "models/skybox.obj", 
-                    &skybox->numVertices, &skybox->arrayVertices, &skybox->arrayNormais, &skybox->arrayTextures);
-    skybox->textureID = loadBMPImage(projectPath + "models/skybox.bmp");
-    skybox->kAmb[0] = 0.5;
-    skybox->kAmb[1] = 0.8;
-    skybox->kAmb[2] = 1;
-    skybox->kAmb[3] = 1.0;
-    skybox->kDif[0] = 0.9;
-    skybox->kDif[1] = 0.9;
-    skybox->kDif[2] = 0.9;
-    skybox->kDif[3] = 1.0;
-    skybox->kEsp[0] = 0.9;
-    skybox->kEsp[1] = 0.9;
-    skybox->kEsp[2] = 0.9;
-    skybox->kEsp[3] = 1.0;
-    skybox->coefPhong = 100;
-    skybox->desl.x = 0;
-    skybox->desl.y = 0;
-    skybox->desl.z = 0;
-    skybox->anguloRot.x = 0;
-    skybox->anguloRot.y = 90;
-    skybox->anguloRot.z = 0;
-    skybox->factorEsc.x = 10;
-    skybox->factorEsc.y = 10;
-    skybox->factorEsc.z = 10;*/
+    GraphicModel * obj = new GraphicModel();
+    lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                    &obj->numVertices, &obj->arrayVertices, &obj->arrayTextures);
+    obj->textureID = loadImage(projectPath + "models/skybox.bmp", &obj->image);
+    obj->desl.x = 0;
+    obj->desl.y = 0;
+    obj->desl.z = 0;
+    obj->anguloRot.x = 0;
+    obj->anguloRot.y = 0;
+    obj->anguloRot.z = 0;
+    obj->factorEsc.x = 1;
+    unsigned int max = obj->image.cols > obj->image.rows ? obj->image.cols : obj->image.rows;
+    obj->factorEsc.y = (double) obj->image.cols / max;
+    obj->factorEsc.z = (double) obj->image.rows / max;
+    ss_images.push_back(obj);
 
     matrizProj = CreateProjectionMatrix(proj.fovy, proj.aspect_ratio, proj.near_plane, proj.far_plane);
-    Translate(&matrizProj, 0, 0, -6);
-    RotateAboutX(&matrizProj, DegreesToRadians(-45));
-    RotateAboutZ(&matrizProj, DegreesToRadians(90));
+    Translate(&matrizProj, 0, 2, -6);
+    RotateAboutX(&matrizProj, DegreesToRadians(90));
+    RotateAboutZ(&matrizProj, DegreesToRadians(-90));
 }
 
 void libertarArraysGlobais(void) {

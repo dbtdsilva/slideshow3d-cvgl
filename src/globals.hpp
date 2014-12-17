@@ -16,7 +16,7 @@
 #include <GL/freeglut.h>
 #include <string>
 #include "utils/mathUtils.hpp"
-#include "graphicmodel.hpp"
+#include "models/graphicmodel.hpp"
 
 using namespace std;
 
@@ -35,6 +35,6 @@ extern GLuint vs, fs;
 extern GLint attribute_coord3d, attribute_texcoord;
 extern mat4x4 matrizProj, matrizModelView;
 
-extern GraphicModel *skybox;
+extern vector<GraphicModel*> ss_images;
 extern bool animationActive;
 #endif

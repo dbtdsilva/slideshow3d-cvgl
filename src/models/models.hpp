@@ -17,13 +17,16 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <string>
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
 
 using namespace std;
+using namespace cv;
 
 void lerVerticesDeFicheiro(string nome, int *numVertices, vector<float> *arrayVertices, 
-										vector<float> *arrayNormais, vector<float> *arrayTextures);
+										vector<float> *arrayTextures, vector<float> *arrayNormais = NULL);
 void escreverVerticesEmFicheiro(string nome, int numVertices, GLfloat *arrayVertices);
-GLuint loadBMPImage(string imagepath);
+GLuint loadImage(string imagepath, Mat * image);
 GLfloat *calcularNormaisTriangulos(int numVertices, GLfloat *arrayVertices);
 
 #endif

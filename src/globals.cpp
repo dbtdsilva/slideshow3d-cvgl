@@ -18,5 +18,5 @@ GLuint vs, fs;
 GLint attribute_coord3d, attribute_texcoord;
 mat4x4 matrizProj, matrizModelView;
 
-GraphicModel * skybox;
+vector<GraphicModel*> ss_images;
 bool animationActive;
