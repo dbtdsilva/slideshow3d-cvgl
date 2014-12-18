@@ -18,6 +18,12 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
+#define BOOST_FILESYSTEM_VERSION 3
+#define BOOST_FILESYSTEM_NO_DEPRECATED 
+
+#include <boost/filesystem.hpp>
+
+namespace fs = ::boost::filesystem;
 using namespace std;
 using namespace cv;
 
@@ -26,10 +32,14 @@ GLuint loadImage(string imagepath, Mat *image) {
 	GLuint textureID = 0;
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-	*image = cv::imread(imagepath, CV_LOAD_IMAGE_UNCHANGED);
+	*image = cv::imread(imagepath, CV_LOAD_IMAGE_COLOR);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, (image->step & 3) ? 1 : 4);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, image->step/image->elemSize());
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image->data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	return textureID;
@@ -148,3 +158,22 @@ GLfloat *calcularNormaisTriangulos(int numVertices, GLfloat *arrayVertices)
 	return arrayNormais;
 }
 
+vector<string> listImagesDirectory(string path, bool recursive) {
+	std::vector<string> v;
+	if(!fs::exists(path) || !fs::is_directory(path)) 
+		return v;
+
+    fs::recursive_directory_iterator it(path);
+    fs::recursive_directory_iterator endit;
+
+    while(it != endit) {
+        if (fs::is_regular_file(*it) && (it->path().extension() == ".bmp"  || 
+        								 it->path().extension() == ".png"  || 
+        								 it->path().extension() == ".jpg"  ||
+        								 it->path().extension() == ".jpeg" ||
+        								 it->path().extension() == ".tiff" )) 
+        	v.push_back(it->path().string());
+        ++it;
+    }
+    return v;
+}

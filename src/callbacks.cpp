@@ -19,6 +19,11 @@
 
 using namespace std;
 
+void animation_zoomInImage(int);
+void animation_zoomOutImage(int);
+void animation_moveRight(int);
+void animation_moveLeft(int);
+
 void produceModelsShading(GraphicModel *obj)
 {
     glEnableVertexAttribArray(attribute_coord3d);
@@ -100,18 +105,51 @@ void myKeyboard(unsigned char key, int x, int y)
         break;        
     }
 }
-
+/* RANDOM */
 void mySpecialKeys(int key, int x, int y)
 {
-    if (animationActive)
-        return;
+    //if (animationActive)
+    //    return;
+    unsigned int max;
 
     switch (key)
     {
     case GLUT_KEY_LEFT :
+        if (currentPos == 0)
+            break;
+        glutTimerFunc(20, animation_zoomOutImage, currentPos);
+        currentPos--;
+        for (int i = 0; i < ss_images.size(); i++) {
+            if (i > currentPos) {
+                ss_images[i]->anguloRot.z = 45;
+                ss_images[i]->desl.y = 1.5 + (i - currentPos - 1);
+            } else if (i < currentPos) {
+                ss_images[i]->anguloRot.z = -45;
+                ss_images[i]->desl.y = -1.5 - (currentPos - i - 1);
+            } else {
+                ss_images[i]->desl.y = 0;
+                ss_images[i]->anguloRot.z = 0;
+            }
+        }
         glutPostRedisplay();
         break;
     case GLUT_KEY_RIGHT :
+        if (currentPos == ss_images.size() - 1)
+            break;
+        glutTimerFunc(20, animation_zoomOutImage, currentPos);
+        currentPos++;
+        for (int i = 0; i < ss_images.size(); i++) {
+            if (i > currentPos) {
+                ss_images[i]->anguloRot.z = 45;
+                ss_images[i]->desl.y = 1.5 + (i - currentPos - 1);
+            } else if (i < currentPos) {
+                ss_images[i]->anguloRot.z = -45;
+                ss_images[i]->desl.y = -1.5 - (currentPos - i - 1);
+            } else {
+                ss_images[i]->desl.y = 0;
+                ss_images[i]->anguloRot.z = 0;
+            }
+        }
         glutPostRedisplay();
         break;
     case GLUT_KEY_UP :
@@ -125,18 +163,20 @@ void mySpecialKeys(int key, int x, int y)
 
 void onMouse(int button, int state, int x, int y)
 {
-    if (button == 3) {
-        Scale(&matrizProj, 1.02, 1.02, 1.02);
-        glutPostRedisplay();
+    if (animationActive)
         return;
-    }
 
-    if (button == 4){
-        Scale(&matrizProj, 0.98, 0.98, 0.98);
-        glutPostRedisplay();
-        return;
-    }
+    switch (button) {
+        case 3:
+            glutTimerFunc(20, animation_zoomInImage, currentPos);
+            break;
+        case 4:
+            glutTimerFunc(20, animation_zoomOutImage, currentPos);
+            break;
+        default:
 
+            break;
+    }
     if (state != GLUT_DOWN)
         return;
 
@@ -156,6 +196,35 @@ void onMouse(int button, int state, int x, int y)
 
     glReadPixels(x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
     gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+}
+
+void animation_zoomInImage(int pos) {
+    if (ss_images[pos]->desl.x > -4) { 
+        animationActive = true;
+        ss_images[pos]->desl.x -= 0.1;
+        glutPostRedisplay();
+        glutTimerFunc(20, animation_zoomInImage, pos);
+    } else {
+        animationActive = false;
+    }
+}
+void animation_zoomOutImage(int pos) {
+    if (ss_images[pos]->desl.x < 0) { 
+        animationActive = true;
+        ss_images[pos]->desl.x += 0.1;
+        glutPostRedisplay();
+        glutTimerFunc(20, animation_zoomOutImage, pos);
+    } else {
+        animationActive = false;
+    }
+}
+
+void animation_moveRight(int pos) {
+
+}
+
+void animation_moveLeft(int pos) {
+
 }
 
 void registarCallbackFunctions(void)

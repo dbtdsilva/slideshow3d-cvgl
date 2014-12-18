@@ -21,11 +21,16 @@
 
 int main(int argc, char **argv)
 {
+	if (argc != 2) {
+		fprintf(stderr, "Invalid number of arguments\nUsage: ./slideshow3d imagesDir");
+		exit(EXIT_FAILURE);
+	} 
 	GLenum glewInitResult;
 	/* Inicializacao do GLUT */
 	glutInit(&argc, argv);
+	/* Inicializacao do GLEW */	
 	inicializarJanela();
-	/* Inicializacao do GLEW */
+	glutHideWindow();
 	glewInitResult = glewInit();
 	if (GLEW_OK != glewInitResult)
 	{
@@ -38,8 +43,9 @@ int main(int argc, char **argv)
 	inicializarEstado();
 	/* Inicializar a cena */
 	inicializarPlanoProjeccao();
-	inicializarModelos();
+	inicializarModelos(string(argv[1]));
 	/* Inicializar os shaders */
+	glutShowWindow();
 	if (initResources() == 1) {
 		/* Registando callback functions se OK */
 		registarCallbackFunctions();

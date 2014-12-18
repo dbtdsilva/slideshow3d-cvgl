@@ -5,7 +5,7 @@ SOURCES		=	project60337.cpp globals.cpp callbacks.cpp models/graphicmodel.cpp in
 				shaders/shaders.cpp utils/mathUtils.cpp
 
 INCLUDEPATH     = 
-LIBS            += -lGLEW -lglut -lGL -lX11  -lm -lGLU `pkg-config opencv --libs`
+LIBS            += -lGLEW -lglut -lGL -lX11  -lm -lGLU -lboost_filesystem -lboost_system `pkg-config opencv --libs`
 TARGET			= slideshow3d
 CONFIG 			-= qt warn_on
 

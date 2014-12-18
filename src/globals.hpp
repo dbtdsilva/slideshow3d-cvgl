@@ -34,6 +34,7 @@ extern GLuint programaGLSL;
 extern GLuint vs, fs;
 extern GLint attribute_coord3d, attribute_texcoord;
 extern mat4x4 matrizProj, matrizModelView;
+extern int currentPos;
 
 extern vector<GraphicModel*> ss_images;
 extern bool animationActive;

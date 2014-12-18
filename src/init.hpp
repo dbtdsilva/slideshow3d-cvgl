@@ -15,7 +15,7 @@ void inicializarEstado(void);
 void inicializarPlanoProjeccao(void);
 void inicializarJanela(void);
 void inicializarFontesDeLuz(void);
-void inicializarModelos(void);
+void inicializarModelos(string);
 void libertarArraysGlobais(void);
 
 #endif

@@ -19,4 +19,6 @@ GLint attribute_coord3d, attribute_texcoord;
 mat4x4 matrizProj, matrizModelView;
 
 vector<GraphicModel*> ss_images;
+int currentPos;
+
 bool animationActive;
