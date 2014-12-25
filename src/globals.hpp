@@ -37,5 +37,7 @@ extern mat4x4 matrizProj, matrizModelView;
 extern int currentPos;
 
 extern vector<GraphicModel*> ss_images;
+extern vector<GraphicModel*> btn_effects;
+extern GraphicModel *btnSave, *btnOptions;
 extern bool animationActive, animationMove;
 #endif

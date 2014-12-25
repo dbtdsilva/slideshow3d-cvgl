@@ -73,6 +73,10 @@ void myDisplay(void)
     glUseProgram(programaGLSL);
     for (int i = 0; i < ss_images.size(); i++) 
         produceModelsShading(ss_images[i]);
+    for (int i = 0; i < btn_effects.size(); i++) 
+        produceModelsShading(btn_effects[i]);
+    produceModelsShading(btnSave);
+    produceModelsShading(btnOptions);
     glutSwapBuffers();
 }
 
@@ -182,16 +186,18 @@ void onMouse(int button, int state, int x, int y)
 
     glReadPixels(x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
     gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+    printf("x: %4.2f, y: %4.2f, z: %5.2f  -> REAL x: %4df, y: %4d\n", posX, posY, posZ, x, y);
 }
 
 void animation_zoomInImage(int pos) {
-    if (ss_images[pos]->desl.x > -4) { 
+    if (ss_images[pos]->desl.x > -4.5) { 
         animationActive = true;
         ss_images[pos]->desl.x -= 0.1;
         glutPostRedisplay();
         glutTimerFunc(20, animation_zoomInImage, pos);
     } else {
-        ss_images[pos]->desl.x = -4;
+        ss_images[pos]->desl.x = -4.5;
         animationActive = false;
     }
 }

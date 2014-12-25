@@ -92,6 +92,60 @@ void inicializarModelos(string path)
         obj->factorEsc.z = (double) obj->image.rows / max;
         ss_images.push_back(obj);
     }
+
+    int numberEffects = 10;
+    printf("Loading effect panels");
+    for (int i = 0; i < numberEffects; i++) {
+        obj = new GraphicModel();
+        lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &obj->numVertices, &obj->arrayVertices, &obj->arrayTextures);
+        obj->textureID = loadImage(projectPath + "models/white.png", &obj->image);
+        obj->desl.x = -4.6;
+        obj->desl.y = -0.66 + (i/2) * 0.33;
+        obj->desl.z = i % 2 ? 0.7 : 0.87;
+        obj->anguloRot.x = 0;
+        obj->anguloRot.y = 0;
+        obj->anguloRot.z = 0;
+        obj->factorEsc.x = 1;
+        obj->factorEsc.y = 0.16;
+        obj->factorEsc.z = 0.08;
+        btn_effects.push_back(obj);
+    }
+    btn_effects[0]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[0]->image);
+    btn_effects[1]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[1]->image);
+    btn_effects[2]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[2]->image);
+    btn_effects[3]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[3]->image);
+    btn_effects[4]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[4]->image);
+    
+
+    btnSave = new GraphicModel();
+    lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &btnSave->numVertices, &btnSave->arrayVertices, &btnSave->arrayTextures);
+    btnSave->textureID = loadImage(projectPath + "models/white.png", &btnSave->image);
+    btnSave->desl.x = -4.6;
+    btnSave->desl.y = -0.85;
+    btnSave->desl.z = -0.85;
+    btnSave->anguloRot.x = 0;
+    btnSave->anguloRot.y = 0;
+    btnSave->anguloRot.z = 0;
+    btnSave->factorEsc.x = 1;
+    btnSave->factorEsc.y = 0.08;
+    btnSave->factorEsc.z = 0.08;
+
+    btnOptions = new GraphicModel();
+    lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &btnOptions->numVertices, &btnOptions->arrayVertices, &btnOptions->arrayTextures);
+    btnOptions->textureID = loadImage(projectPath + "models/white.png", &btnOptions->image);
+    btnOptions->desl.x = -4.6;
+    btnOptions->desl.y = 0.85;
+    btnOptions->desl.z = -0.85;
+    btnOptions->anguloRot.x = 0;
+    btnOptions->anguloRot.y = 0;
+    btnOptions->anguloRot.z = 0;
+    btnOptions->factorEsc.x = 1;
+    btnOptions->factorEsc.y = 0.08;
+    btnOptions->factorEsc.z = 0.08;
+
     cout << "Images completely loaded (100%)" << endl;
     cout << "Creating projection" << endl;
     matrizProj = CreateProjectionMatrix(proj.fovy, proj.aspect_ratio, proj.near_plane, proj.far_plane);
