@@ -41,6 +41,7 @@ void inicializarEstado(void)
     matrizProj = IDENTITY_MATRIX;
     matrizModelView = IDENTITY_MATRIX;
     animationActive = false;
+    animationMove = false;
     currentPos = 0;
 }
 
@@ -79,7 +80,7 @@ void inicializarModelos(string path)
         lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &obj->numVertices, &obj->arrayVertices, &obj->arrayTextures);
         obj->textureID = loadImage(files[i], &obj->image);
-        obj->desl.x = 0;
+        obj->desl.x = i == 0 ? -2 : 0;
         obj->desl.y = i == 0 ? 0 : 1.5 + (i-1);
         obj->desl.z = 0;
         obj->anguloRot.x = 0;

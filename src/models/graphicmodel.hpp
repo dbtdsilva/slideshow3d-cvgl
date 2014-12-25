@@ -32,9 +32,9 @@ public:
     Mat image;
     GLuint textureID;
     /* Parametros das transformacoes */
-    Point3_<float> desl;
-    Point3_<float> anguloRot;
-    Point3_<float> factorEsc;
+    Point3_<double> desl;
+    Point3_<double> anguloRot;
+    Point3_<double> factorEsc;
 };
 
 #endif

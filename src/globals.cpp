@@ -22,3 +22,4 @@ vector<GraphicModel*> ss_images;
 int currentPos;
 
 bool animationActive;
+bool animationMove;
