@@ -23,6 +23,8 @@ void animation_zoomInImage(int);
 void animation_zoomOutImage(int);
 void animation_moveRight(int);
 void animation_moveLeft(int);
+bool checkButtonClick(double, double, GraphicModel*);
+void animation_buttonPressed(int);
 
 void produceModelsShading(GraphicModel *obj)
 {
@@ -163,33 +165,60 @@ void onMouse(int button, int state, int x, int y)
         case 4:
             glutTimerFunc(20, animation_zoomOutImage, currentPos);
             break;
-        default:
+        case 0:
+            if (state != GLUT_DOWN)
+                return;
 
+            GLint viewport[4];
+            GLdouble modelview[16], projection[16];
+            GLfloat winX, winY, winZ;
+            GLdouble posX, posY, posZ;
+         
+            glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+            glGetDoublev(GL_PROJECTION_MATRIX, projection);
+            glGetIntegerv(GL_VIEWPORT, viewport);
+         
+            winX = (float)x;
+            winY = (float)viewport[3] - (float)y;
+            for (int i = 0; i < 16; i++) 
+                projection[i] = matrizProj.m[i];
+
+            glReadPixels(x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+            gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+            for (int i = 0; i < btn_effects.size(); i++) {
+                if (checkButtonClick(posY, posZ, btn_effects[i]))
+                    printf("Pressed %d\n", i);
+            }
+            if (checkButtonClick(posY, posZ, btnSave)) {
+                printf("Pressed save button\n");
+            } else if (checkButtonClick(posY, posZ, btnOptions)) {
+                printf("Pressed options button\n");
+            }
             break;
     }
-    if (state != GLUT_DOWN)
-        return;
-
-    GLint viewport[4];
-    GLdouble modelview[16], projection[16];
-    GLfloat winX, winY, winZ;
-    GLdouble posX, posY, posZ;
- 
-    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-    glGetDoublev(GL_PROJECTION_MATRIX, projection);
-    glGetIntegerv(GL_VIEWPORT, viewport);
- 
-    winX = (float)x;
-    winY = (float)viewport[3] - (float)y;
-    for (int i = 0; i < 16; i++) 
-        projection[i] = matrizProj.m[i];
-
-    glReadPixels(x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-    gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
-
-    printf("x: %4.2f, y: %4.2f, z: %5.2f  -> REAL x: %4df, y: %4d\n", posX, posY, posZ, x, y);
 }
-
+bool checkButtonClick(double posY, double posZ, GraphicModel *obj) {
+    if (posZ < obj->desl.z + obj->factorEsc.z && posZ > obj->desl.z - obj->factorEsc.z
+        && posY < obj->desl.y + obj->factorEsc.y && posY > obj->desl.y - obj->factorEsc.y)
+    {
+        btnPressed = obj;
+        glutTimerFunc(20, animation_buttonPressed, 1);
+        return true;
+    }
+    return false;
+}
+void animation_buttonPressed(int status) {
+    if ((status == 1 && btnPressed->desl.x < -4.57) ||
+        (status == 0 && btnPressed->desl.x > -4.6)) {
+        btnPressed->desl.x += 0.01 * (status * 2 - 1);
+        glutPostRedisplay();
+        if (btnPressed->desl.x >= -4.57 && status == 1)
+            glutTimerFunc(10, animation_buttonPressed, 0);
+        else if (!(btnPressed->desl.x <= -4.6 && status == 0))
+            glutTimerFunc(10, animation_buttonPressed, status);
+    }
+}
 void animation_zoomInImage(int pos) {
     if (ss_images[pos]->desl.x > -4.5) { 
         animationActive = true;

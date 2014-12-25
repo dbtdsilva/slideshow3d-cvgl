@@ -38,6 +38,6 @@ extern int currentPos;
 
 extern vector<GraphicModel*> ss_images;
 extern vector<GraphicModel*> btn_effects;
-extern GraphicModel *btnSave, *btnOptions;
+extern GraphicModel *btnSave, *btnOptions, *btnPressed;
 extern bool animationActive, animationMove;
 #endif

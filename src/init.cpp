@@ -102,7 +102,7 @@ void inicializarModelos(string path)
         obj->textureID = loadImage(projectPath + "models/white.png", &obj->image);
         obj->desl.x = -4.6;
         obj->desl.y = -0.66 + (i/2) * 0.33;
-        obj->desl.z = i % 2 ? 0.7 : 0.87;
+        obj->desl.z = i % 2 == 0 ? 0.7 : 0.87;
         obj->anguloRot.x = 0;
         obj->anguloRot.y = 0;
         obj->anguloRot.z = 0;

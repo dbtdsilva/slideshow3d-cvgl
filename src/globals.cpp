@@ -20,7 +20,8 @@ mat4x4 matrizProj, matrizModelView;
 
 vector<GraphicModel*> ss_images;
 vector<GraphicModel*> btn_effects;
-GraphicModel *btnSave, *btnOptions;
+GraphicModel *btnSave, *btnOptions, *btnPressed;
+
 int currentPos;
 bool animationActive;
 bool animationMove;
