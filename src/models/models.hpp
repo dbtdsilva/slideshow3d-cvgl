@@ -27,6 +27,7 @@ void lerVerticesDeFicheiro(string nome, int *numVertices, vector<float> *arrayVe
 										vector<float> *arrayTextures, vector<float> *arrayNormais = NULL);
 void escreverVerticesEmFicheiro(string nome, int numVertices, GLfloat *arrayVertices);
 GLuint loadImage(string imagepath, Mat * image);
+GLuint loadImage(Mat * image);
 GLfloat *calcularNormaisTriangulos(int numVertices, GLfloat *arrayVertices);
 vector<string> listImagesDirectory(string path, bool recursive);
 

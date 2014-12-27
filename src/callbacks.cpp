@@ -155,14 +155,15 @@ void mySpecialKeys(int key, int x, int y)
 
 void onMouse(int button, int state, int x, int y)
 {
-    if (animationActive)
-        return;
-
     switch (button) {
         case 3:
+            if (animationActive)
+                return;
             glutTimerFunc(20, animation_zoomInImage, currentPos);
             break;
         case 4:
+            if (animationActive)
+                return;
             glutTimerFunc(20, animation_zoomOutImage, currentPos);
             break;
         case 0:
@@ -187,8 +188,14 @@ void onMouse(int button, int state, int x, int y)
             gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
             for (int i = 0; i < btn_effects.size(); i++) {
-                if (checkButtonClick(posY, posZ, btn_effects[i]))
-                    printf("Pressed %d\n", i);
+                if (checkButtonClick(posY, posZ, btn_effects[i])) {
+                    vector<void*> v;
+
+                    if (i < getNumberEffects) {
+                        matEffects.applyEffect(i, &ss_images[currentPos]->image, v);
+                        ss_images[currentPos]->textureID = loadImage(&ss_images[currentPos]->image);
+                    }
+                }
             }
             if (checkButtonClick(posY, posZ, btnSave)) {
                 printf("Pressed save button\n");
@@ -197,6 +204,7 @@ void onMouse(int button, int state, int x, int y)
             }
             break;
     }
+    glutPostRedisplay();
 }
 bool checkButtonClick(double posY, double posZ, GraphicModel *obj) {
     if (posZ < obj->desl.z + obj->factorEsc.z && posZ > obj->desl.z - obj->factorEsc.z

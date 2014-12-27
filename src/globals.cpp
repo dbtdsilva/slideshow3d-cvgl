@@ -22,6 +22,8 @@ vector<GraphicModel*> ss_images;
 vector<GraphicModel*> btn_effects;
 GraphicModel *btnSave, *btnOptions, *btnPressed;
 
+Effects matEffects;
 int currentPos;
 bool animationActive;
 bool animationMove;
+bool animationZoom;

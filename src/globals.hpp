@@ -15,6 +15,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <string>
+#include "effects/Effects.hpp"
 #include "utils/mathUtils.hpp"
 #include "models/graphicmodel.hpp"
 
@@ -38,6 +39,7 @@ extern int currentPos;
 
 extern vector<GraphicModel*> ss_images;
 extern vector<GraphicModel*> btn_effects;
+extern Effects matEffects;
 extern GraphicModel *btnSave, *btnOptions, *btnPressed;
-extern bool animationActive, animationMove;
+extern bool animationActive, animationMove, animationZoom;
 #endif

@@ -92,14 +92,15 @@ void inicializarModelos(string path)
         obj->factorEsc.z = (double) obj->image.rows / max;
         ss_images.push_back(obj);
     }
+    cout << "Images completely loaded (100%)" << endl;
 
-    int numberEffects = 10;
-    printf("Loading effect panels");
-    for (int i = 0; i < numberEffects; i++) {
+    printf("Loading effects panels\n");
+    for (int i = 0; i < matEffects.getNumberEffects(); i++) {
+        printf("Loading effect (%4.1f): %s\n", ((double) i / matEffects.getNumberEffects()) * 100, files[i].c_str());
         obj = new GraphicModel();
         lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &obj->numVertices, &obj->arrayVertices, &obj->arrayTextures);
-        obj->textureID = loadImage(projectPath + "models/white.png", &obj->image);
+        obj->textureID = loadImage(projectPath + matEffects.getPreviewImagePath(i), &obj->image);
         obj->desl.x = -4.6;
         obj->desl.y = -0.66 + (i/2) * 0.33;
         obj->desl.z = i % 2 == 0 ? 0.7 : 0.87;
@@ -111,12 +112,8 @@ void inicializarModelos(string path)
         obj->factorEsc.z = 0.08;
         btn_effects.push_back(obj);
     }
-    btn_effects[0]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[0]->image);
-    btn_effects[1]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[1]->image);
-    btn_effects[2]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[2]->image);
-    btn_effects[3]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[3]->image);
-    btn_effects[4]->textureID = loadImage(projectPath + "models/white.png", &btn_effects[4]->image);
-    
+
+    cout << "Effects completely loaded (100%)" << endl;
 
     btnSave = new GraphicModel();
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
@@ -146,7 +143,6 @@ void inicializarModelos(string path)
     btnOptions->factorEsc.y = 0.08;
     btnOptions->factorEsc.z = 0.08;
 
-    cout << "Images completely loaded (100%)" << endl;
     cout << "Creating projection" << endl;
     matrizProj = CreateProjectionMatrix(proj.fovy, proj.aspect_ratio, proj.near_plane, proj.far_plane);
     Translate(&matrizProj, 0, 0, -6);

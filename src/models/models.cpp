@@ -32,8 +32,6 @@ GLuint loadImage(string imagepath, Mat *image) {
 	GLuint textureID = 0;
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
@@ -41,6 +39,18 @@ GLuint loadImage(string imagepath, Mat *image) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, (image->step & 3) ? 1 : 4);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, image->step/image->elemSize());
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image->data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return textureID;
+}
+GLuint loadImage(Mat *image) {
+	GLuint textureID = 0;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, (image->step & 3) ? 1 : 4);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, image->step/image->elemSize());
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGRA, GL_UNSIGNED_BYTE, image->data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	return textureID;
 }

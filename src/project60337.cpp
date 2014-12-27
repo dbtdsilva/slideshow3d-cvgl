@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 	/* Qual a versao do OpenGL? */
 	fprintf(stdout, "INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
 	/* Inicializar o estado da aplicacao */
+	
 	inicializarEstado();
 	/* Inicializar a cena */
 	inicializarPlanoProjeccao();
