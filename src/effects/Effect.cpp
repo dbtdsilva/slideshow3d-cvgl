@@ -7,7 +7,6 @@
 
 #include "Effect.hpp"
 #include <iostream>
-
 using namespace cv;
 
 Effect::Effect(string previewImage) {
@@ -23,4 +22,12 @@ string Effect::getEffectName() {
 }
 Mat Effect::applyEffect(Mat, vector<void*>) {
 	return Mat();
+}
+vector<void*> Effect::readParameters() {
+	vector<void *> v;
+	return v;
+}
+vector<void*> Effect::requestDefaultParameters() {
+	vector<void *> v;
+	return v;
 }

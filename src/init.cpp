@@ -80,6 +80,8 @@ void inicializarModelos(string path)
         lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &obj->numVertices, &obj->arrayVertices, &obj->arrayTextures);
         obj->textureID = loadImage(files[i], &obj->image);
+        obj->filepath = files[i];
+        obj->original = obj->image;
         obj->desl.x = i == 0 ? -2 : 0;
         obj->desl.y = i == 0 ? 0 : 1.5 + (i-1);
         obj->desl.z = 0;
@@ -96,11 +98,12 @@ void inicializarModelos(string path)
 
     printf("Loading effects panels\n");
     for (int i = 0; i < matEffects.getNumberEffects(); i++) {
-        printf("Loading effect (%4.1f): %s\n", ((double) i / matEffects.getNumberEffects()) * 100, files[i].c_str());
+        printf("Loading effect (%4.1f): %s\n", ((double) i / matEffects.getNumberEffects()) * 100, matEffects.getPreviewImagePath(i).c_str());
         obj = new GraphicModel();
         lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &obj->numVertices, &obj->arrayVertices, &obj->arrayTextures);
         obj->textureID = loadImage(projectPath + matEffects.getPreviewImagePath(i), &obj->image);
+        obj->filepath = projectPath + matEffects.getPreviewImagePath(i);
         obj->desl.x = -4.6;
         obj->desl.y = -0.66 + (i/2) * 0.33;
         obj->desl.z = i % 2 == 0 ? 0.7 : 0.87;
@@ -119,6 +122,7 @@ void inicializarModelos(string path)
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &btnSave->numVertices, &btnSave->arrayVertices, &btnSave->arrayTextures);
     btnSave->textureID = loadImage(projectPath + "models/white.png", &btnSave->image);
+    btnSave->filepath = projectPath + "models/white.png";
     btnSave->desl.x = -4.6;
     btnSave->desl.y = -0.85;
     btnSave->desl.z = -0.85;
@@ -129,10 +133,26 @@ void inicializarModelos(string path)
     btnSave->factorEsc.y = 0.08;
     btnSave->factorEsc.z = 0.08;
 
+    btnDiscard = new GraphicModel();
+    lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &btnDiscard->numVertices, &btnDiscard->arrayVertices, &btnDiscard->arrayTextures);
+    btnDiscard->textureID = loadImage(projectPath + "models/white.png", &btnDiscard->image);
+    btnDiscard->filepath = projectPath + "models/white.png";
+    btnDiscard->desl.x = -4.6;
+    btnDiscard->desl.y = -0.65;
+    btnDiscard->desl.z = -0.85;
+    btnDiscard->anguloRot.x = 0;
+    btnDiscard->anguloRot.y = 0;
+    btnDiscard->anguloRot.z = 0;
+    btnDiscard->factorEsc.x = 1;
+    btnDiscard->factorEsc.y = 0.08;
+    btnDiscard->factorEsc.z = 0.08;
+
     btnOptions = new GraphicModel();
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &btnOptions->numVertices, &btnOptions->arrayVertices, &btnOptions->arrayTextures);
     btnOptions->textureID = loadImage(projectPath + "models/white.png", &btnOptions->image);
+    btnOptions->filepath = projectPath + "models/white.png";
     btnOptions->desl.x = -4.6;
     btnOptions->desl.y = 0.85;
     btnOptions->desl.z = -0.85;

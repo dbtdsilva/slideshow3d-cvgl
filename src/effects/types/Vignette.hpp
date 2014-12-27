@@ -1,5 +1,5 @@
 /*
- * Threshold.hpp
+ * Vignette.hpp
  *
  * Author: Diogo Silva (dbtds@ua.pt)
  *
@@ -10,18 +10,18 @@
   *		https://books.google.pt/books?id=GY-AAwAAQBAJ
   */
 
-#ifndef THRESHOLD_H
-#define THRESHOLD_H
+#ifndef VIGNETTE_H
+#define VIGNETTE_H
 
 #include "../Effect.hpp"
 
 using namespace cv;
 using namespace std;
 
-class Threshold : public Effect {
+class Vignette : public Effect {
 
 public:
-	Threshold(string imagepath) : Effect(imagepath) {}
+	Vignette(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		Mat image_out;
@@ -32,7 +32,7 @@ public:
 	}
 	
 	string getEffectName() {
-		return "Threshold";
+		return "Vignette";
 	}
 	vector<void*> readParameters() {
 		vector<void *> v;

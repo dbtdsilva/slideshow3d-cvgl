@@ -79,6 +79,7 @@ void myDisplay(void)
         produceModelsShading(btn_effects[i]);
     produceModelsShading(btnSave);
     produceModelsShading(btnOptions);
+    produceModelsShading(btnDiscard);
     glutSwapBuffers();
 }
 
@@ -189,18 +190,24 @@ void onMouse(int button, int state, int x, int y)
 
             for (int i = 0; i < btn_effects.size(); i++) {
                 if (checkButtonClick(posY, posZ, btn_effects[i])) {
-                    vector<void*> v;
-
-                    if (i < getNumberEffects) {
-                        matEffects.applyEffect(i, &ss_images[currentPos]->image, v);
+                    if (i < matEffects.getNumberEffects()) {
+                        matEffects.applyEffect(i, &ss_images[currentPos]->image, matEffects.readParameters(i));
                         ss_images[currentPos]->textureID = loadImage(&ss_images[currentPos]->image);
                     }
                 }
             }
             if (checkButtonClick(posY, posZ, btnSave)) {
-                printf("Pressed save button\n");
+                string s = ss_images[currentPos]->filepath;
+                string::size_type i = s.rfind('.', s.length());
+                if (i != string::npos)
+                    s.replace(i, 0, "_output");
+                saveImage(s, ss_images[currentPos]->image);
+                cout << "Saved file as: " << s << endl;
             } else if (checkButtonClick(posY, posZ, btnOptions)) {
                 printf("Pressed options button\n");
+            } else if (checkButtonClick(posY, posZ, btnDiscard)) {
+                ss_images[currentPos]->image = ss_images[currentPos]->original;
+                ss_images[currentPos]->textureID = loadImage(&ss_images[currentPos]->image);
             }
             break;
     }

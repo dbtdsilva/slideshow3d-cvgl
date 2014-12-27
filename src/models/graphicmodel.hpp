@@ -29,7 +29,8 @@ public:
     vector<float> arrayVertices;
     vector<float> arrayNormais;
     vector<float> arrayTextures;
-    Mat image;
+    string filepath;
+    Mat image, original;
     GLuint textureID;
     /* Parametros das transformacoes */
     Point3_<double> desl;

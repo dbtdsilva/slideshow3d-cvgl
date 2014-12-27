@@ -50,9 +50,18 @@ GLuint loadImage(Mat *image) {
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glPixelStorei(GL_UNPACK_ALIGNMENT, (image->step & 3) ? 1 : 4);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, image->step/image->elemSize());
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGRA, GL_UNSIGNED_BYTE, image->data);
+
+	if (image->channels() == 3)
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image->data);
+	else if (image->channels() == 4)
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_BGRA, GL_UNSIGNED_BYTE, image->data);
+	else
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, image->cols, image->rows, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, image->data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	return textureID;
+}
+void saveImage(string filename, Mat image) {
+	imwrite(filename, image);
 }
 void lerVerticesDeFicheiro(string nome, int *numVertices, vector<float> *arrayVertices, 
 										vector<float> *arrayTextures, vector<float> *arrayNormais)

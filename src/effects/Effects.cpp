@@ -8,12 +8,13 @@
 #include "Effects.hpp"
 #include "../globals.hpp"
 #include "types/Sepia.hpp"
+#include "types/CannyE.hpp"
 
 using namespace std;
 
 Effects::Effects() {
 	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
+	list.push_back(new CannyE("effects/types/sepia.png"));
 	list.push_back(new Sepia("effects/types/sepia.png"));
 	list.push_back(new Sepia("effects/types/sepia.png"));
 	list.push_back(new Sepia("effects/types/sepia.png"));
@@ -37,4 +38,10 @@ string Effects::getEffectName(unsigned int effectNumber) {
 }
 string Effects::getPreviewImagePath(unsigned int effectNumber) {
 	return list[effectNumber]->getPreviewImagePath();
+}
+vector<void*> Effects::requestDefaultParameters(unsigned int effectNumber) {
+	return list[effectNumber]->requestDefaultParameters();
+}
+vector<void*> Effects::readParameters(unsigned int effectNumber) {
+	return list[effectNumber]->readParameters();
 }

@@ -10,6 +10,7 @@
 
 #include <string>
 #include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
 using namespace std;
@@ -23,6 +24,8 @@ public:
 	string getPreviewImagePath();
 	virtual Mat applyEffect(Mat, vector<void*>);
 	virtual string getEffectName();
+	virtual vector<void*> readParameters();
+	virtual vector<void*> requestDefaultParameters();
 private:
 	string image;
 	string effectName;
