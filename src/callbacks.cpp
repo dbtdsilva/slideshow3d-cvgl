@@ -196,6 +196,7 @@ void onMouse(int button, int state, int x, int y)
                     }
                 }
             }
+            
             if (checkButtonClick(posY, posZ, btnSave)) {
                 string s = ss_images[currentPos]->filepath;
                 string::size_type i = s.rfind('.', s.length());
