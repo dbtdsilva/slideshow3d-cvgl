@@ -24,41 +24,19 @@ public:
 	Lomo(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
-		Mat image_out;
-	    Canny(in, image_out, *((double *) args[0]), *((double *) args[1]), *((double *) args[2]));
-	    cvtColor(image_out, image_out, COLOR_GRAY2RGB);
-	    args.clear();
+		Mat image_out = in.clone();
+		/* O mesmo efeito que o Sepia mas com o R e o B trocados */
+	    Mat kernel = (Mat_<float>(4,4) <<  0.393, 0.769, 0.189, 0,
+	                                       0.349, 0.686, 0.168, 0,
+	                                       0.272, 0.534, 0.131, 0,
+	                                       0,     0,     0,     1);
+	    								 /*   B     G     R     A */  
+	    transform(in, image_out, kernel);
 		return image_out;
 	}
 	
 	string getEffectName() {
 		return "Lomo";
-	}
-	vector<void*> readParameters() {
-		vector<void *> v;
-		double v1, v2;
-		int v3;
-		cout << "Lower threshold: ";
-		cin >> v1;
-		cout << "Upper threshold: ";
-		cin >> v2;
-		cout << "Aperture size (default - 3): ";
-		cin >> v3;
-
-		v.push_back(new double(v1));
-		v.push_back(new double(v2));
-		v.push_back(new double(v3));
-		return v;
-	}
-	vector<void*> requestDefaultParameters() {
-		vector<void *> v;
-		double v1 = 100;
-		double v2 = 150;
-		int v3 = 3;
-		v.push_back(new double(v1));
-		v.push_back(new double(v2));
-		v.push_back(new double(v3));
-		return v;
 	}
 };
 
