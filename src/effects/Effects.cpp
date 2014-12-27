@@ -9,20 +9,28 @@
 #include "../globals.hpp"
 #include "types/Sepia.hpp"
 #include "types/CannyE.hpp"
+#include "types/Cartoon.hpp"
+#include "types/Threshold.hpp"
+#include "types/ChannelSwitch.hpp"
+#include "types/Lomo.hpp"
+#include "types/BlackWhite.hpp"
+#include "types/FloodFilling.hpp"
+#include "types/Vignette.hpp"
+#include "types/Pencil.hpp"
 
 using namespace std;
 
 Effects::Effects() {
 	list.push_back(new Sepia("effects/types/sepia.png"));
 	list.push_back(new CannyE("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
-	list.push_back(new Sepia("effects/types/sepia.png"));
+	list.push_back(new Cartoon("effects/types/sepia.png"));
+	list.push_back(new ChannelSwitch("effects/types/sepia.png"));
+	list.push_back(new Lomo("effects/types/sepia.png"));
+	list.push_back(new BlackWhite("effects/types/sepia.png"));
+	list.push_back(new FloodFilling("effects/types/sepia.png"));
+	list.push_back(new Vignette("effects/types/sepia.png"));
+	list.push_back(new Pencil("effects/types/sepia.png"));
+	list.push_back(new Threshold("effects/types/sepia.png"));
 }
 Effects::~Effects() {
 	list.clear();

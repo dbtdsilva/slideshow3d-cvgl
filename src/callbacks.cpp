@@ -191,7 +191,7 @@ void onMouse(int button, int state, int x, int y)
             for (int i = 0; i < btn_effects.size(); i++) {
                 if (checkButtonClick(posY, posZ, btn_effects[i])) {
                     if (i < matEffects.getNumberEffects()) {
-                        matEffects.applyEffect(i, &ss_images[currentPos]->image, matEffects.readParameters(i));
+                        matEffects.applyEffect(i, &ss_images[currentPos]->image, matEffects.requestDefaultParameters(i));
                         ss_images[currentPos]->textureID = loadImage(&ss_images[currentPos]->image);
                     }
                 }
