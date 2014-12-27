@@ -24,11 +24,16 @@ public:
 	Cartoon(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
-		Mat image_out;
-	    Canny(in, image_out, *((double *) args[0]), *((double *) args[1]), *((double *) args[2]));
-	    cvtColor(image_out, image_out, COLOR_GRAY2RGB);
-	    args.clear();
-		return image_out;
+		Mat bgr, edges, edgesBgr;
+
+		cvtColor(in, bgr, COLOR_BGRA2BGR);
+	    pyrMeanShiftFiltering(in, bgr, 15, 40);
+	    
+	    Canny(in, edges, 150, 150);
+	    cvtColor(edges, edgesBgr, COLOR_GRAY2BGR);
+	    
+	    bgr = bgr - edgesBgr;
+    	return bgr;
 	}
 	
 	string getEffectName() {

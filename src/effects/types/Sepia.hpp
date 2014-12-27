@@ -23,6 +23,10 @@ public:
 	Sepia(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
+		if (in.channels() < 3) {
+			cout << "You can't apply this effect on an image without 3 channels at least (RGB)" << endl;
+			return in;
+		}
 		Mat image_out = in.clone();
 		/* 			O mesmo que fazer 
 			r = r ∗ 0.189 + g ∗ 0.769 + b ∗ 0.393

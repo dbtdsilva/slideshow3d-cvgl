@@ -24,9 +24,9 @@ public:
 	FloodFilling(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
-		Mat image_out;
-	    Canny(in, image_out, *((double *) args[0]), *((double *) args[1]), *((double *) args[2]));
-	    cvtColor(image_out, image_out, COLOR_GRAY2RGB);
+		Mat image_out = in.clone();
+		floodFill(image_out, Point(*((int*) args[0]), *((int*) args[1])), *((int*) args[2]), 0, 
+									*((int*) args[3]), *((int*) args[4]));
 	    args.clear();
 		return image_out;
 	}
@@ -36,28 +36,40 @@ public:
 	}
 	vector<void*> readParameters() {
 		vector<void *> v;
-		double v1, v2;
-		int v3;
-		cout << "Lower threshold: ";
+		int v1, v2, v3;
+		int x, y;
+		cout << "Start point" << endl << "X: ";
+		cin >> x;
+		cout << "Y: ";
+		cin >> y;
+		cout << "New value to write on pixel: ";
 		cin >> v1;
-		cout << "Upper threshold: ";
+		cout << "Lower margin to flood (default - 50): ";
 		cin >> v2;
-		cout << "Aperture size (default - 3): ";
+		cout << "Upper margin to flood (default - 50): ";
 		cin >> v3;
-
-		v.push_back(new double(v1));
-		v.push_back(new double(v2));
-		v.push_back(new double(v3));
+		v.push_back(new int(x));
+		v.push_back(new int(y));
+		v.push_back(new int(v1));
+		v.push_back(new int(v2));
+		v.push_back(new int(v3));
 		return v;
 	}
 	vector<void*> requestDefaultParameters() {
 		vector<void *> v;
-		double v1 = 100;
-		double v2 = 150;
-		int v3 = 3;
-		v.push_back(new double(v1));
-		v.push_back(new double(v2));
-		v.push_back(new double(v3));
+		int v1 = 0;
+		int v2 = 50;
+		int v3 = 50;
+		int x, y;
+		cout << "Start point" << endl << "X: ";
+		cin >> x;
+		cout << "Y: ";
+		cin >> y;
+		v.push_back(new int(x));
+		v.push_back(new int(y));
+		v.push_back(new int(v1));
+		v.push_back(new int(v2));
+		v.push_back(new int(v3));
 		return v;
 	}
 };

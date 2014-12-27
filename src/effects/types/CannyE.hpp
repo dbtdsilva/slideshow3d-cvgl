@@ -26,7 +26,6 @@ public:
 	Mat applyEffect(Mat in, vector<void*> args) {
 		Mat image_out;
 	    Canny(in, image_out, *((double *) args[0]), *((double *) args[1]), *((double *) args[2]));
-	    cvtColor(image_out, image_out, COLOR_GRAY2RGB);
 	    args.clear();
 		return image_out;
 	}

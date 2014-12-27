@@ -2,7 +2,7 @@ HEADERS		= 	callbacks.hpp init.hpp models/graphicmodel.hpp models/models.hpp glo
 				utils/mathUtils.hpp shaders/shaders.hpp effects/Effects.hpp effects/Effect.hpp \
 				effects/types/Sepia.hpp effects/types/CannyE.hpp effects/types/Cartoon.hpp \
 				effects/types/Threshold.hpp effects/types/ChannelSwitch.hpp effects/types/Lomo.hpp \
-				effects/types/BlackWhite.hpp effects/types/FloodFilling.hpp effects/types/Vignette.hpp \
+				effects/types/Grayscale.hpp effects/types/FloodFilling.hpp effects/types/Vignette.hpp \
 				effects/types/Pencil.hpp
 				
 SOURCES		=	project60337.cpp globals.cpp callbacks.cpp models/graphicmodel.cpp init.cpp models/models.cpp \
