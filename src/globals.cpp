@@ -18,9 +18,9 @@ GLuint vs, fs;
 GLint attribute_coord3d, attribute_texcoord;
 mat4x4 matrizProj, matrizModelView;
 
-vector<GraphicModel*> ss_images;
-vector<GraphicModel*> btn_effects;
-GraphicModel *btnSave, *btnOptions, *btnPressed, *btnDiscard;
+vector<GraphicModel> ss_images;
+vector<GraphicModel> btn_effects;
+GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard;
 
 Effects matEffects;
 int currentPos;

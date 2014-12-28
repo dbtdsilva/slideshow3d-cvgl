@@ -10,7 +10,8 @@
 #include "types/Sepia.hpp"
 #include "types/CannyE.hpp"
 #include "types/Cartoon.hpp"
-#include "types/Threshold.hpp"
+#include "types/Illumination.hpp"
+#include "types/Saturation.hpp"
 #include "types/ChannelSwitch.hpp"
 #include "types/Lomo.hpp"
 #include "types/Grayscale.hpp"
@@ -21,18 +22,20 @@
 using namespace std;
 
 Effects::Effects() {
-	list.push_back(new Sepia("effects/types/sepia.png"));			/* check */
-	list.push_back(new CannyE("effects/types/sepia.png"));			/* check */
-	list.push_back(new Cartoon("effects/types/sepia.png"));			/* bug on grayscale */
-	list.push_back(new ChannelSwitch("effects/types/sepia.png"));	/* check */
-	list.push_back(new Lomo("effects/types/sepia.png"));			/* check */
-	list.push_back(new Grayscale("effects/types/sepia.png"));		/* check */
-	list.push_back(new FloodFilling("effects/types/sepia.png"));	/* check */
-	list.push_back(new Vignette("effects/types/sepia.png"));		/* bug on grayscale */
-	list.push_back(new Pencil("effects/types/sepia.png"));
-	list.push_back(new Threshold("effects/types/sepia.png"));
+	list.push_back(new Sepia("effects/types/sepia.jpg"));
+	list.push_back(new Lomo("effects/types/lomo.jpg"));				
+	list.push_back(new Cartoon("effects/types/cartoon.jpg"));				
+	list.push_back(new CannyE("effects/types/canny.jpg"));	
+	list.push_back(new Grayscale("effects/types/grayscale.jpg"));	
+	list.push_back(new Saturation("effects/types/saturation.jpg"));
+	list.push_back(new Vignette("effects/types/vignette.jpg"));
+	list.push_back(new Pencil("effects/types/pencil.jpg"));
+	list.push_back(new ChannelSwitch("effects/types/channelswitch.jpg"));
+	list.push_back(new Illumination("effects/types/illumination.jpg"));
 }
 Effects::~Effects() {
+	for (int i = 0; i < list.size(); i++)
+		delete list[i];
 	list.clear();
 }
 Mat Effects::applyEffect(unsigned int effectNumber, Mat* in, vector<void*> arg) {

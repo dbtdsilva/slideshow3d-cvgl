@@ -13,8 +13,10 @@
 #ifndef PENCIL_H
 #define PENCIL_H
 
+#define ChannelBlend_ColorDodge(A,B) ((uint8_t)((B == 255) ? B:min(255, ((A << 8 ) / (255 - B)))))
+  
 #include "../Effect.hpp"
-
+  
 using namespace cv;
 using namespace std;
 
@@ -24,10 +26,22 @@ public:
 	Pencil(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
+		if (in.channels() < 3) {
+			cout << "You can't apply this effect on an image without 3 channels at least (RGB)" << endl;
+			return in;
+		}
 		Mat image_out;
-	    Canny(in, image_out, *((double *) args[0]), *((double *) args[1]), *((double *) args[2]));
-	    cvtColor(image_out, image_out, COLOR_GRAY2RGB);
-	    args.clear();
+
+	    Mat imagem8Bits;
+	    Mat imagemSobel5x5_X;
+	    Sobel(in, imagemSobel5x5_X, CV_16SC1, 1, 0, *((int*) args[0]));
+	    Mat imagemSobel5x5_Y;
+	    Sobel(in, imagemSobel5x5_Y, CV_16SC1, 0, 1, *((int*) args[0]));
+
+	    image_out = imagemSobel5x5_X^2 + imagemSobel5x5_Y^2;
+	    convertScaleAbs(image_out, image_out);
+	    bitwise_not(image_out, image_out);
+	    cvtColor(image_out, image_out, CV_BGR2GRAY);
 		return image_out;
 	}
 	
@@ -36,28 +50,16 @@ public:
 	}
 	vector<void*> readParameters() {
 		vector<void *> v;
-		double v1, v2;
-		int v3;
-		cout << "Lower threshold: ";
+		int v1;
+		cout << "Sobel kernel size (default is 3, possible values: 1, 3, 5 or 7): ";
 		cin >> v1;
-		cout << "Upper threshold: ";
-		cin >> v2;
-		cout << "Aperture size (default - 3): ";
-		cin >> v3;
-
-		v.push_back(new double(v1));
-		v.push_back(new double(v2));
-		v.push_back(new double(v3));
+		v.push_back(new int(v1));
 		return v;
 	}
 	vector<void*> requestDefaultParameters() {
 		vector<void *> v;
-		double v1 = 100;
-		double v2 = 150;
-		int v3 = 3;
-		v.push_back(new double(v1));
-		v.push_back(new double(v2));
-		v.push_back(new double(v3));
+		int v1 = 3;
+		v.push_back(new int(v1));
 		return v;
 	}
 };

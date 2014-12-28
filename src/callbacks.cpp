@@ -74,12 +74,12 @@ void myDisplay(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(programaGLSL);
     for (int i = 0; i < ss_images.size(); i++) 
-        produceModelsShading(ss_images[i]);
+        produceModelsShading(&ss_images[i]);
     for (int i = 0; i < btn_effects.size(); i++) 
-        produceModelsShading(btn_effects[i]);
-    produceModelsShading(btnSave);
-    produceModelsShading(btnOptions);
-    produceModelsShading(btnDiscard);
+        produceModelsShading(&btn_effects[i]);
+    produceModelsShading(&btnSave);
+    produceModelsShading(&btnOptions);
+    produceModelsShading(&btnDiscard);
     glutSwapBuffers();
 }
 
@@ -142,9 +142,7 @@ void mySpecialKeys(int key, int x, int y)
         break;
 
     case GLUT_KEY_UP:
-        for (int i = 0; i < ss_images.size(); i++) {
-            cout << ss_images[i]->desl.x << ", " << ss_images[i]->desl.y << ", "<< ss_images[i]->anguloRot.z << endl;
-        }
+        cout << ss_images[currentPos].image.rows <<","<< ss_images[currentPos].image.cols << "," << ss_images[currentPos].image.channels() << endl;
         cout << endl;
         glutPostRedisplay();
         break;
@@ -189,26 +187,26 @@ void onMouse(int button, int state, int x, int y)
             gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
             for (int i = 0; i < btn_effects.size(); i++) {
-                if (checkButtonClick(posY, posZ, btn_effects[i])) {
+                if (checkButtonClick(posY, posZ, &btn_effects[i])) {
                     if (i < matEffects.getNumberEffects()) {
-                        matEffects.applyEffect(i, &ss_images[currentPos]->image, matEffects.requestDefaultParameters(i));
-                        ss_images[currentPos]->textureID = loadImage(&ss_images[currentPos]->image);
+                        matEffects.applyEffect(i, &ss_images[currentPos].image, matEffects.requestDefaultParameters(i));
+                        ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
                     }
                 }
             }
             
-            if (checkButtonClick(posY, posZ, btnSave)) {
-                string s = ss_images[currentPos]->filepath;
+            if (checkButtonClick(posY, posZ, &btnSave)) {
+                string s = ss_images[currentPos].filepath;
                 string::size_type i = s.rfind('.', s.length());
                 if (i != string::npos)
                     s.replace(i, 0, "_output");
-                saveImage(s, ss_images[currentPos]->image);
+                saveImage(s, ss_images[currentPos].image);
                 cout << "Saved file as: " << s << endl;
-            } else if (checkButtonClick(posY, posZ, btnOptions)) {
+            } else if (checkButtonClick(posY, posZ, &btnOptions)) {
                 printf("Pressed options button\n");
-            } else if (checkButtonClick(posY, posZ, btnDiscard)) {
-                ss_images[currentPos]->image = ss_images[currentPos]->original;
-                ss_images[currentPos]->textureID = loadImage(&ss_images[currentPos]->image);
+            } else if (checkButtonClick(posY, posZ, &btnDiscard)) {
+                ss_images[currentPos].image = ss_images[currentPos].original;
+                ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
             }
             break;
     }
@@ -236,25 +234,25 @@ void animation_buttonPressed(int status) {
     }
 }
 void animation_zoomInImage(int pos) {
-    if (ss_images[pos]->desl.x > -4.5) { 
+    if (ss_images[pos].desl.x > -4.5) { 
         animationActive = true;
-        ss_images[pos]->desl.x -= 0.1;
+        ss_images[pos].desl.x -= 0.1;
         glutPostRedisplay();
         glutTimerFunc(20, animation_zoomInImage, pos);
     } else {
-        ss_images[pos]->desl.x = -4.5;
+        ss_images[pos].desl.x = -4.5;
         animationActive = false;
     }
 }
 void animation_zoomOutImage(int pos) {
     int max = pos == currentPos ? -2 : 0;
-    if (ss_images[pos]->desl.x < max) { 
+    if (ss_images[pos].desl.x < max) { 
         animationActive = true;
-        ss_images[pos]->desl.x += 0.1;
+        ss_images[pos].desl.x += 0.1;
         glutPostRedisplay();
         glutTimerFunc(20, animation_zoomOutImage, pos);
     } else {
-        ss_images[pos]->desl.x = max;
+        ss_images[pos].desl.x = max;
         animationActive = false;
     }
 }
@@ -263,34 +261,34 @@ void animation_moveRight(int pos) {
     bool changed = false;
     for (int i = 0; i < ss_images.size(); i++) {
         if (i == currentPos) {
-            if (ss_images[i]->desl.y > 0) {
-                ss_images[i]->desl.y -= 0.05;
+            if (ss_images[i].desl.y > 0) {
+                ss_images[i].desl.y -= 0.05;
                 changed = true;
             }
-            if (ss_images[i]->anguloRot.z != 0) {
-                ss_images[i]->anguloRot.z -= 3; 
+            if (ss_images[i].anguloRot.z != 0) {
+                ss_images[i].anguloRot.z -= 3; 
                 changed = true;
             }
-            if (ss_images[i]->desl.x > -2) {
-                ss_images[i]->desl.x -= 0.1;
+            if (ss_images[i].desl.x > -2) {
+                ss_images[i].desl.x -= 0.1;
                 changed = true;
             }
         } else if (i > currentPos) {
-            if (ss_images[i]->anguloRot.z < 45) {
-                ss_images[i]->anguloRot.z += 3;
+            if (ss_images[i].anguloRot.z < 45) {
+                ss_images[i].anguloRot.z += 3;
                 changed = true;
             }
-            if (ss_images[i]->desl.y > (0.5 + i - currentPos)) {
-                ss_images[i]->desl.y -= 0.05;
+            if (ss_images[i].desl.y > (0.5 + i - currentPos)) {
+                ss_images[i].desl.y -= 0.05;
                 changed = true;
             }
         } else {
-            if (ss_images[i]->anguloRot.z > -45) {
-                ss_images[i]->anguloRot.z -= 3;
+            if (ss_images[i].anguloRot.z > -45) {
+                ss_images[i].anguloRot.z -= 3;
                 changed = true;
             }
-            if (ss_images[i]->desl.y > (-0.5 + i - currentPos)) {
-                ss_images[i]->desl.y -= 0.05;
+            if (ss_images[i].desl.y > (-0.5 + i - currentPos)) {
+                ss_images[i].desl.y -= 0.05;
                 changed = true;
             }
         }
@@ -300,12 +298,12 @@ void animation_moveRight(int pos) {
         glutTimerFunc(5, animation_moveRight, pos);
     else {
         for (int i = 0; i < ss_images.size(); i++) {
-            ss_images[i]->desl.y = i < currentPos ? -0.5 + i - currentPos : 0.5 + i - currentPos;
-            ss_images[i]->anguloRot.z = i < currentPos ? -45 : 45;
+            ss_images[i].desl.y = i < currentPos ? -0.5 + i - currentPos : 0.5 + i - currentPos;
+            ss_images[i].anguloRot.z = i < currentPos ? -45 : 45;
             if (i == currentPos) {
-                ss_images[i]->desl.x = -2;
-                ss_images[i]->desl.y = 0;
-                ss_images[i]->anguloRot.z = 0;
+                ss_images[i].desl.x = -2;
+                ss_images[i].desl.y = 0;
+                ss_images[i].anguloRot.z = 0;
             }
         }
         animationMove = false;
@@ -316,34 +314,34 @@ void animation_moveLeft(int pos) {
     bool changed = false;
     for (int i = 0; i < ss_images.size(); i++) {
         if (i == currentPos) {
-            if (ss_images[i]->desl.y < 0) {
-                ss_images[i]->desl.y += 0.05;
+            if (ss_images[i].desl.y < 0) {
+                ss_images[i].desl.y += 0.05;
                 changed = true;
             }
-            if (ss_images[i]->anguloRot.z != 0) {
-                ss_images[i]->anguloRot.z += 3; 
+            if (ss_images[i].anguloRot.z != 0) {
+                ss_images[i].anguloRot.z += 3; 
                 changed = true;
             }
-            if (ss_images[i]->desl.x > -2) {
-                ss_images[i]->desl.x -= 0.1;
+            if (ss_images[i].desl.x > -2) {
+                ss_images[i].desl.x -= 0.1;
                 changed = true;
             }
         } else if (i > currentPos) {
-            if (ss_images[i]->anguloRot.z < 45) {
-                ss_images[i]->anguloRot.z += 3;
+            if (ss_images[i].anguloRot.z < 45) {
+                ss_images[i].anguloRot.z += 3;
                 changed = true;
             }
-            if (ss_images[i]->desl.y < (0.5 + i - currentPos)) {
-                ss_images[i]->desl.y += 0.05;
+            if (ss_images[i].desl.y < (0.5 + i - currentPos)) {
+                ss_images[i].desl.y += 0.05;
                 changed = true;
             }
         } else {
-            if (ss_images[i]->anguloRot.z > -45) {
-                ss_images[i]->anguloRot.z -= 3;
+            if (ss_images[i].anguloRot.z > -45) {
+                ss_images[i].anguloRot.z -= 3;
                 changed = true;
             }
-            if (ss_images[i]->desl.y < (-0.5 + i - currentPos)) {
-                ss_images[i]->desl.y += 0.05;
+            if (ss_images[i].desl.y < (-0.5 + i - currentPos)) {
+                ss_images[i].desl.y += 0.05;
                 changed = true;
             }
             
@@ -354,12 +352,12 @@ void animation_moveLeft(int pos) {
         glutTimerFunc(5, animation_moveLeft, pos);
     else {
         for (int i = 0; i < ss_images.size(); i++) {
-            ss_images[i]->desl.y = i < currentPos ? -0.5 + i - currentPos : 0.5 + i - currentPos;
-            ss_images[i]->anguloRot.z = i < currentPos ? -45 : 45;
+            ss_images[i].desl.y = i < currentPos ? -0.5 + i - currentPos : 0.5 + i - currentPos;
+            ss_images[i].anguloRot.z = i < currentPos ? -45 : 45;
             if (i == currentPos) {
-                ss_images[i]->desl.x = -2;
-                ss_images[i]->desl.y = 0;
-                ss_images[i]->anguloRot.z = 0;
+                ss_images[i].desl.x = -2;
+                ss_images[i].desl.y = 0;
+                ss_images[i].anguloRot.z = 0;
             }
         }
         animationMove = false;

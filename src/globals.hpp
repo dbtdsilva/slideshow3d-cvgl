@@ -37,9 +37,9 @@ extern GLint attribute_coord3d, attribute_texcoord;
 extern mat4x4 matrizProj, matrizModelView;
 extern int currentPos;
 
-extern vector<GraphicModel*> ss_images;
-extern vector<GraphicModel*> btn_effects;
+extern vector<GraphicModel> ss_images;
+extern vector<GraphicModel> btn_effects;
 extern Effects matEffects;
-extern GraphicModel *btnSave, *btnOptions, *btnPressed, *btnDiscard;
+extern GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard;
 extern bool animationActive, animationMove, animationZoom;
 #endif

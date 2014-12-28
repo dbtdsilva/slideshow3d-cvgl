@@ -24,6 +24,10 @@ public:
 	Cartoon(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
+		if (in.channels() < 3)
+	    	cvtColor(in, in, CV_GRAY2BGR);
+	    else if (in.channels() > 3)
+	    	cvtColor(in, in, CV_BGRA2BGR);
 		Mat bgr, edges, edgesBgr;
 
 		cvtColor(in, bgr, COLOR_BGRA2BGR);
