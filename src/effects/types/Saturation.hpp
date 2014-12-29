@@ -25,6 +25,10 @@ public:
 	Saturation(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
+		if (in.channels() < 3)
+	    	cvtColor(in, in, CV_GRAY2BGR);
+	    else if (in.channels() > 3)
+	    	cvtColor(in, in, CV_BGRA2BGR);
 		Mat image_out, yuv;
 
 	   	cvtColor(in, yuv, CV_BGR2YCrCb, 0);

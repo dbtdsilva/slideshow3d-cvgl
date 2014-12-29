@@ -114,14 +114,39 @@ void inicializarModelos(string path)
         obj.factorEsc.z = 0.08;
         btn_effects.push_back(obj);
     }
-
+    lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &cameraTexture.numVertices, &cameraTexture.arrayVertices, &cameraTexture.arrayTextures);
+    cameraTexture.textureID = loadImage(projectPath + "models/white.png", &cameraTexture.image);
+    cameraTexture.original = cameraTexture.image;
+    cameraTexture.desl.x = -4;
+    cameraTexture.desl.y = 0;
+    cameraTexture.desl.z = 0;
+    cameraTexture.anguloRot.x = 0;
+    cameraTexture.anguloRot.y = 0;
+    cameraTexture.anguloRot.z = 0;
+    cameraTexture.factorEsc.x = 1;
+    cameraTexture.factorEsc.y = 0.8;
+    cameraTexture.factorEsc.z = 0;
     cout << "Effects completely loaded (100%)" << endl;
 
-    //btnSave = new GraphicModel();
+    lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &btnCamera.numVertices, &btnCamera.arrayVertices, &btnCamera.arrayTextures);
+    btnCamera.textureID = loadImage(projectPath + "models/camera.png", &btnCamera.image);
+    btnCamera.filepath = projectPath + "models/camera.png";
+    btnCamera.desl.x = -4.6;
+    btnCamera.desl.y = 0.85;
+    btnCamera.desl.z = -0.85;
+    btnCamera.anguloRot.x = 0;
+    btnCamera.anguloRot.y = 0;
+    btnCamera.anguloRot.z = 0;
+    btnCamera.factorEsc.x = 1;
+    btnCamera.factorEsc.y = 0.1;
+    btnCamera.factorEsc.z = 0.08;
+
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &btnSave.numVertices, &btnSave.arrayVertices, &btnSave.arrayTextures);
-    btnSave.textureID = loadImage(projectPath + "models/white.png", &btnSave.image);
-    btnSave.filepath = projectPath + "models/white.png";
+    btnSave.textureID = loadImage(projectPath + "models/save.png", &btnSave.image);
+    btnSave.filepath = projectPath + "models/save.png";
     btnSave.desl.x = -4.6;
     btnSave.desl.y = -0.85;
     btnSave.desl.z = -0.85;
@@ -132,11 +157,10 @@ void inicializarModelos(string path)
     btnSave.factorEsc.y = 0.08;
     btnSave.factorEsc.z = 0.08;
 
-    //btnDiscard = new GraphicModel();
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &btnDiscard.numVertices, &btnDiscard.arrayVertices, &btnDiscard.arrayTextures);
-    btnDiscard.textureID = loadImage(projectPath + "models/white.png", &btnDiscard.image);
-    btnDiscard.filepath = projectPath + "models/white.png";
+    btnDiscard.textureID = loadImage(projectPath + "models/reset.png", &btnDiscard.image);
+    btnDiscard.filepath = projectPath + "models/reset.png";
     btnDiscard.desl.x = -4.6;
     btnDiscard.desl.y = -0.65;
     btnDiscard.desl.z = -0.85;
@@ -147,11 +171,10 @@ void inicializarModelos(string path)
     btnDiscard.factorEsc.y = 0.08;
     btnDiscard.factorEsc.z = 0.08;
 
-    //btnOptions = new GraphicModel();
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &btnOptions.numVertices, &btnOptions.arrayVertices, &btnOptions.arrayTextures);
-    btnOptions.textureID = loadImage(projectPath + "models/white.png", &btnOptions.image);
-    btnOptions.filepath = projectPath + "models/white.png";
+    btnOptions.textureID = loadImage(projectPath + "models/options.png", &btnOptions.image);
+    btnOptions.filepath = projectPath + "models/options.png";
     btnOptions.desl.x = -4.6;
     btnOptions.desl.y = 0.85;
     btnOptions.desl.z = -0.85;
@@ -159,7 +182,8 @@ void inicializarModelos(string path)
     btnOptions.anguloRot.y = 0;
     btnOptions.anguloRot.z = 0;
     btnOptions.factorEsc.x = 1;
-    btnOptions.factorEsc.y = 0.08;
+    //btnOptions.factorEsc.y = 0.08;
+    btnOptions.factorEsc.y = 0.0;   /* Hiding */
     btnOptions.factorEsc.z = 0.08;
 
     cout << "Creating projection" << endl;

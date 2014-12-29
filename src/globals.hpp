@@ -19,6 +19,10 @@
 #include "utils/mathUtils.hpp"
 #include "models/graphicmodel.hpp"
 
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
+
 using namespace std;
 
 struct projCoord {
@@ -40,6 +44,11 @@ extern int currentPos;
 extern vector<GraphicModel> ss_images;
 extern vector<GraphicModel> btn_effects;
 extern Effects matEffects;
-extern GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard;
+extern GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard, btnCamera;
+extern GraphicModel cameraTexture;
 extern bool animationActive, animationMove, animationZoom;
+
+extern bool cameraActive;
+extern int cameraLastEffect;
+extern VideoCapture stream;
 #endif

@@ -29,8 +29,6 @@ public:
 	    else if (in.channels() > 3)
 	    	cvtColor(in, in, CV_BGRA2BGR);
 		Mat bgr, edges, edgesBgr;
-
-		cvtColor(in, bgr, COLOR_BGRA2BGR);
 	    pyrMeanShiftFiltering(in, bgr, 15, 40);
 	    
 	    Canny(in, edges, 150, 150);

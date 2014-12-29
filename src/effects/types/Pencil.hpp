@@ -26,10 +26,10 @@ public:
 	Pencil(string imagepath) : Effect(imagepath) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
-		if (in.channels() < 3) {
-			cout << "You can't apply this effect on an image without 3 channels at least (RGB)" << endl;
-			return in;
-		}
+		if (in.channels() < 3)
+	    	cvtColor(in, in, CV_GRAY2BGR);
+	    else if (in.channels() > 3)
+	    	cvtColor(in, in, CV_BGRA2BGR);
 		Mat image_out;
 
 	    Mat imagem8Bits;

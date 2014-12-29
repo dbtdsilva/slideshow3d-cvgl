@@ -25,6 +25,7 @@ void animation_moveRight(int);
 void animation_moveLeft(int);
 bool checkButtonClick(double, double, GraphicModel*);
 void animation_buttonPressed(int);
+void refreshCameraPanel(int);
 
 void produceModelsShading(GraphicModel *obj)
 {
@@ -77,38 +78,21 @@ void myDisplay(void)
         produceModelsShading(&ss_images[i]);
     for (int i = 0; i < btn_effects.size(); i++) 
         produceModelsShading(&btn_effects[i]);
+    produceModelsShading(&cameraTexture);
     produceModelsShading(&btnSave);
     produceModelsShading(&btnOptions);
     produceModelsShading(&btnDiscard);
+    produceModelsShading(&btnCamera);
     glutSwapBuffers();
 }
 
 void myKeyboard(unsigned char key, int x, int y)
 {
-    int i;
-    GraphicModel *obj;
     switch (key)
     {
     case 'Q' :
     case 'q' :
     case 27  :  exit(EXIT_SUCCESS);
-    case '+' :
-        glutPostRedisplay();
-        break;
-    case '-' :
-        glutPostRedisplay();
-        break;
-    case '.':
-        glutPostRedisplay();
-        break;
-    case ',':
-        glutPostRedisplay();
-        break;
-    case 'p':
-    case 'P':
-        break;
-    case 'm':
-    case 'M':
         break;        
     }
 }
@@ -120,34 +104,25 @@ void mySpecialKeys(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_LEFT:
+        if (animationMove)
+            break;
         if (currentPos == 0)
             break;
         glutTimerFunc(20, animation_zoomOutImage, currentPos);
         currentPos--;
-        if (animationMove)
-            break;
         animationMove = true;
         glutTimerFunc(20, animation_moveLeft, currentPos);
         break;
 
     case GLUT_KEY_RIGHT:
+        if (animationMove)
+            break;
         if (currentPos == ss_images.size() - 1)
             break;
         glutTimerFunc(20, animation_zoomOutImage, currentPos);
         currentPos++;
-        if (animationMove)
-            break;
         animationMove = true;
         glutTimerFunc(20, animation_moveRight, currentPos);
-        break;
-
-    case GLUT_KEY_UP:
-        cout << ss_images[currentPos].image.rows <<","<< ss_images[currentPos].image.cols << "," << ss_images[currentPos].image.channels() << endl;
-        cout << endl;
-        glutPostRedisplay();
-        break;
-    case GLUT_KEY_DOWN:
-        glutPostRedisplay();
         break;
     }
 }
@@ -156,12 +131,12 @@ void onMouse(int button, int state, int x, int y)
 {
     switch (button) {
         case 3:
-            if (animationActive)
+            if (animationActive || cameraActive)
                 return;
             glutTimerFunc(20, animation_zoomInImage, currentPos);
             break;
         case 4:
-            if (animationActive)
+            if (animationActive || cameraActive)
                 return;
             glutTimerFunc(20, animation_zoomOutImage, currentPos);
             break;
@@ -189,22 +164,45 @@ void onMouse(int button, int state, int x, int y)
             for (int i = 0; i < btn_effects.size(); i++) {
                 if (checkButtonClick(posY, posZ, &btn_effects[i])) {
                     if (i < matEffects.getNumberEffects()) {
-                        matEffects.applyEffect(i, &ss_images[currentPos].image, matEffects.requestDefaultParameters(i));
-                        ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
+                        if (cameraActive) {
+                            cameraLastEffect = i;
+                        } else {
+                            matEffects.applyEffect(i, &ss_images[currentPos].image, matEffects.requestDefaultParameters(i));
+                            ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
+                        }
                     }
                 }
             }
             
             if (checkButtonClick(posY, posZ, &btnSave)) {
-                string s = ss_images[currentPos].filepath;
-                string::size_type i = s.rfind('.', s.length());
-                if (i != string::npos)
-                    s.replace(i, 0, "_output");
-                saveImage(s, ss_images[currentPos].image);
-                cout << "Saved file as: " << s << endl;
-            } else if (checkButtonClick(posY, posZ, &btnOptions)) {
+                if (cameraActive) {
+                    saveImage("../savedImages/cameraShot.jpg", cameraTexture.image);
+                    cout << "Saved file as: ../savedImages/cameraShot.jpg" << endl;
+                } else {
+                    string s = ss_images[currentPos].filepath;
+                    string::size_type i = s.rfind('.', s.length());
+                    if (i != string::npos)
+                        s.replace(i, 0, "_output");
+                    s = "../savedImages/" + string(basename(s.c_str()));
+                    saveImage(s, ss_images[currentPos].image);
+                    cout << "Saved file as: " << s << endl;
+                }
+                
+            } else if (!cameraActive && checkButtonClick(posY, posZ, &btnOptions)) {
                 printf("Pressed options button\n");
-            } else if (checkButtonClick(posY, posZ, &btnDiscard)) {
+            } else if (checkButtonClick(posY, posZ, &btnCamera)) {
+                if (cameraActive) {
+                    cameraActive = false;
+                    cameraLastEffect = -1;
+                    cameraTexture.factorEsc.z = 0;
+                    stream.release();
+                } else {
+                    glutTimerFunc(0, animation_zoomOutImage, currentPos);
+
+                    glutTimerFunc(20, refreshCameraPanel, 1);
+                    cameraActive = true;                   
+                }
+            } else if (!cameraActive && checkButtonClick(posY, posZ, &btnDiscard)) {
                 ss_images[currentPos].image = ss_images[currentPos].original;
                 ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
             }
@@ -221,6 +219,33 @@ bool checkButtonClick(double posY, double posZ, GraphicModel *obj) {
         return true;
     }
     return false;
+}
+
+void refreshCameraPanel(int value) {
+    if (value && animationActive) {
+        glutTimerFunc(20, refreshCameraPanel, 1);
+        return;
+    }
+    if (value) {
+        Mat cameraFrame;
+        stream = VideoCapture(0);
+        stream.read(cameraFrame);
+        double max = cameraFrame.cols > cameraFrame.rows ? cameraFrame.cols : cameraFrame.rows;
+        cameraTexture.factorEsc.y = (double) cameraFrame.cols / max;
+        cameraTexture.factorEsc.z = (double) cameraFrame.rows / max;
+        glutTimerFunc(20, refreshCameraPanel, 0);
+    }
+    if (cameraActive) {
+        Mat cameraFrame;
+        stream.read(cameraFrame);
+        cameraTexture.image = cameraFrame;
+        if (cameraLastEffect > -1 && matEffects.getEffectName(cameraLastEffect) != "Cartoon") {
+            matEffects.applyEffect(cameraLastEffect, &cameraTexture.image, matEffects.requestDefaultParameters(cameraLastEffect));
+        }       
+        cameraTexture.textureID = loadImage(&cameraTexture.image);
+        glutTimerFunc(30, refreshCameraPanel, 0);
+    } 
+    glutPostRedisplay();
 }
 void animation_buttonPressed(int status) {
     if ((status == 1 && btnPressed->desl.x < -4.57) ||
