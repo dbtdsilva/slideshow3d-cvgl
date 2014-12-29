@@ -22,7 +22,6 @@ public:
 private:
 	Theme* getThemePos(int);
 	int themePos;
-	vector<Theme*> list;
 	vector<GraphicModel> images;
 };
 

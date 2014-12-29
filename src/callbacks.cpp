@@ -108,6 +108,14 @@ void mySpecialKeys(int key, int x, int y)
         if (!cameraActive)
             theme->pressRight();
         break;
+    case GLUT_KEY_DOWN:
+        if (!cameraActive)
+            theme->pressDown();
+        break;
+    case GLUT_KEY_UP:
+        if (!cameraActive)
+            theme->pressUp();
+        break;
     }
 }
 

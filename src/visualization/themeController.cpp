@@ -18,8 +18,6 @@ ThemeController::ThemeController(string path) {
         obj.original = obj.image;
         images.push_back(obj);
     }
-	//list.push_back(Coverflow::getInstance(&images));
-    //list.push_back(Slideflow::getInstance(&images));
 	themePos = 0;
 }
 ThemeController::~ThemeController() {
@@ -42,8 +40,8 @@ Theme* ThemeController::next() {
 Theme* ThemeController::getThemePos(int) {
     switch (themePos) {
         case 0:
-            return Coverflow::getInstance(&images);
-        case 1:
             return Slideflow::getInstance(&images);
+        case 1:
+            return Coverflow::getInstance(&images);
     }
 }
