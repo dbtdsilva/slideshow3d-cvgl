@@ -26,7 +26,7 @@ void Slideflow::initTheme(void) {
     animationActive = false;
     animationMove = false;
     animationZoom = false;
-    currentPos = 0;
+    currentPos = 1;
 
     unsigned int max;
     for (int i = 0; i < c_images->size(); i++) {
@@ -45,9 +45,9 @@ void Slideflow::initTheme(void) {
         (*c_images)[i].factorEsc.y = (double) (*c_images)[i].image.cols / max;
         (*c_images)[i].factorEsc.z = (double) (*c_images)[i].image.rows / max;
     }
-    (*c_images)[0].desl.x = -2;
-    (*c_images)[0].desl.y = 0;
-    (*c_images)[0].desl.z = 1;
+    (*c_images)[currentPos].desl.x = -2;
+    (*c_images)[currentPos].desl.y = 0;
+    (*c_images)[currentPos].desl.z = 0;
 }
 
 void Slideflow::pressLeft(void) {
