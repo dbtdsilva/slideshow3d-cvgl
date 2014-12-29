@@ -17,6 +17,7 @@
 #include "globals.hpp"
 #include "utils/mathUtils.hpp"
 #include "models/models.hpp"
+#include "visualization/personalize/coverflow.hpp"
 #include <iostream>
 
 void inicializarEstado(void)
@@ -40,9 +41,6 @@ void inicializarEstado(void)
     /* Matriz de projeccao é inicialmente a IDENTIDADE => Proj. Paralela Ortogonal */
     matrizProj = IDENTITY_MATRIX;
     matrizModelView = IDENTITY_MATRIX;
-    animationActive = false;
-    animationMove = false;
-    currentPos = 0;
 }
 
 
@@ -71,29 +69,8 @@ void inicializarPlanoProjeccao(void)
 
 void inicializarModelos(string path)
 {
-    vector<string> files = listImagesDirectory(path, false);
-    unsigned int max;
-    for (int i = 0; i < files.size(); i++) {
-        printf("Loading image (%4.1f): %s\n", ((double) i / files.size()) * 100, files[i].c_str());
-        GraphicModel obj;
-        lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
-                        &obj.numVertices, &obj.arrayVertices, &obj.arrayTextures);
-        obj.textureID = loadImage(files[i], &obj.image);
-        obj.filepath = files[i];
-        obj.original = obj.image;
-        obj.desl.x = i == 0 ? -2 : 0;
-        obj.desl.y = i == 0 ? 0 : 1.5 + (i-1);
-        obj.desl.z = 0;
-        obj.anguloRot.x = 0;
-        obj.anguloRot.y = 0;
-        obj.anguloRot.z = i == 0 ? 0 : 45;
-        obj.factorEsc.x = 1;
-        max = obj.image.cols > obj.image.rows ? obj.image.cols : obj.image.rows;
-        obj.factorEsc.y = (double) obj.image.cols / max;
-        obj.factorEsc.z = (double) obj.image.rows / max;
-        ss_images.push_back(obj);
-    }
-    cout << "Images completely loaded (100%)" << endl;
+    theme = Coverflow::getInstance(&ss_images);
+    theme->initTheme(path);
 
     printf("Loading effects panels\n");
     for (int i = 0; i < matEffects.getNumberEffects(); i++) {

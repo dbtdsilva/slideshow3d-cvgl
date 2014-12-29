@@ -3,10 +3,12 @@ HEADERS		= 	callbacks.hpp init.hpp models/graphicmodel.hpp models/models.hpp glo
 				effects/types/Sepia.hpp effects/types/CannyE.hpp effects/types/Cartoon.hpp \
 				effects/types/Illumination.hpp effects/types/ChannelSwitch.hpp effects/types/Lomo.hpp \
 				effects/types/Grayscale.hpp effects/types/FloodFilling.hpp effects/types/Vignette.hpp \
-				effects/types/Pencil.hpp effects/types/Saturation.hpp
+				effects/types/Pencil.hpp effects/types/Saturation.hpp visualization/theme.hpp \
+				visualization/personalize/coverflow.hpp
 				
 SOURCES		=	project60337.cpp globals.cpp callbacks.cpp models/graphicmodel.cpp init.cpp models/models.cpp \
-				shaders/shaders.cpp utils/mathUtils.cpp effects/Effects.cpp effects/Effect.cpp 
+				shaders/shaders.cpp utils/mathUtils.cpp effects/Effects.cpp effects/Effect.cpp \
+				visualization/theme.cpp visualization/personalize/coverflow.cpp
 
 INCLUDEPATH     = 
 LIBS            += -lGLEW -lglut -lGL -lX11  -lm -lGLU -lboost_filesystem -lboost_system `pkg-config opencv --libs`

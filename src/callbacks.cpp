@@ -19,10 +19,6 @@
 
 using namespace std;
 
-void animation_zoomInImage(int);
-void animation_zoomOutImage(int);
-void animation_moveRight(int);
-void animation_moveLeft(int);
 bool checkButtonClick(double, double, GraphicModel*);
 void animation_buttonPressed(int);
 void refreshCameraPanel(int);
@@ -96,7 +92,7 @@ void myKeyboard(unsigned char key, int x, int y)
         break;        
     }
 }
-/* RANDOM */
+
 void mySpecialKeys(int key, int x, int y)
 {
     unsigned int max;
@@ -104,25 +100,13 @@ void mySpecialKeys(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_LEFT:
-        if (animationMove)
-            break;
-        if (currentPos == 0)
-            break;
-        glutTimerFunc(20, animation_zoomOutImage, currentPos);
-        currentPos--;
-        animationMove = true;
-        glutTimerFunc(20, animation_moveLeft, currentPos);
+        if (!cameraActive)
+            theme->pressLeft();
         break;
 
     case GLUT_KEY_RIGHT:
-        if (animationMove)
-            break;
-        if (currentPos == ss_images.size() - 1)
-            break;
-        glutTimerFunc(20, animation_zoomOutImage, currentPos);
-        currentPos++;
-        animationMove = true;
-        glutTimerFunc(20, animation_moveRight, currentPos);
+        if (!cameraActive)
+            theme->pressRight();
         break;
     }
 }
@@ -131,14 +115,12 @@ void onMouse(int button, int state, int x, int y)
 {
     switch (button) {
         case 3:
-            if (animationActive || cameraActive)
-                return;
-            glutTimerFunc(20, animation_zoomInImage, currentPos);
+            if (!cameraActive)
+                theme->zoomIn();
             break;
         case 4:
-            if (animationActive || cameraActive)
-                return;
-            glutTimerFunc(20, animation_zoomOutImage, currentPos);
+            if (!cameraActive)
+                theme->zoomOut();
             break;
         case 0:
             if (state != GLUT_DOWN)
@@ -167,8 +149,8 @@ void onMouse(int button, int state, int x, int y)
                         if (cameraActive) {
                             cameraLastEffect = i;
                         } else {
-                            matEffects.applyEffect(i, &ss_images[currentPos].image, matEffects.requestDefaultParameters(i));
-                            ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
+                            matEffects.applyEffect(i, &ss_images[theme->currentPos].image, matEffects.requestDefaultParameters(i));
+                            ss_images[theme->currentPos].textureID = loadImage(&ss_images[theme->currentPos].image);
                         }
                     }
                 }
@@ -179,12 +161,12 @@ void onMouse(int button, int state, int x, int y)
                     saveImage("../savedImages/cameraShot.jpg", cameraTexture.image);
                     cout << "Saved file as: ../savedImages/cameraShot.jpg" << endl;
                 } else {
-                    string s = ss_images[currentPos].filepath;
+                    string s = ss_images[theme->currentPos].filepath;
                     string::size_type i = s.rfind('.', s.length());
                     if (i != string::npos)
                         s.replace(i, 0, "_output");
                     s = "../savedImages/" + string(basename(s.c_str()));
-                    saveImage(s, ss_images[currentPos].image);
+                    saveImage(s, ss_images[theme->currentPos].image);
                     cout << "Saved file as: " << s << endl;
                 }
                 
@@ -197,14 +179,13 @@ void onMouse(int button, int state, int x, int y)
                     cameraTexture.factorEsc.z = 0;
                     stream.release();
                 } else {
-                    glutTimerFunc(0, animation_zoomOutImage, currentPos);
-
+                    theme->zoomOut();
                     glutTimerFunc(20, refreshCameraPanel, 1);
                     cameraActive = true;                   
                 }
             } else if (!cameraActive && checkButtonClick(posY, posZ, &btnDiscard)) {
-                ss_images[currentPos].image = ss_images[currentPos].original;
-                ss_images[currentPos].textureID = loadImage(&ss_images[currentPos].image);
+                ss_images[theme->currentPos].image = ss_images[theme->currentPos].original;
+                ss_images[theme->currentPos].textureID = loadImage(&ss_images[theme->currentPos].image);
             }
             break;
     }
@@ -222,7 +203,7 @@ bool checkButtonClick(double posY, double posZ, GraphicModel *obj) {
 }
 
 void refreshCameraPanel(int value) {
-    if (value && animationActive) {
+    if (value && theme->animationActive) {
         glutTimerFunc(20, refreshCameraPanel, 1);
         return;
     }
@@ -260,136 +241,6 @@ void animation_buttonPressed(int status) {
             glutTimerFunc(10, animation_buttonPressed, 0);
         else if (!(btnPressed->desl.x <= -4.6 && status == 0))
             glutTimerFunc(10, animation_buttonPressed, status);
-    }
-}
-void animation_zoomInImage(int pos) {
-    if (ss_images[pos].desl.x > -4.5) { 
-        animationActive = true;
-        ss_images[pos].desl.x -= 0.1;
-        glutPostRedisplay();
-        glutTimerFunc(20, animation_zoomInImage, pos);
-    } else {
-        ss_images[pos].desl.x = -4.5;
-        animationActive = false;
-    }
-}
-void animation_zoomOutImage(int pos) {
-    int max = pos == currentPos ? -2 : 0;
-    if (ss_images[pos].desl.x < max) { 
-        animationActive = true;
-        ss_images[pos].desl.x += 0.1;
-        glutPostRedisplay();
-        glutTimerFunc(20, animation_zoomOutImage, pos);
-    } else {
-        ss_images[pos].desl.x = max;
-        animationActive = false;
-    }
-}
-
-void animation_moveRight(int pos) {
-    bool changed = false;
-    for (int i = 0; i < ss_images.size(); i++) {
-        if (i == currentPos) {
-            if (ss_images[i].desl.y > 0) {
-                ss_images[i].desl.y -= 0.05;
-                changed = true;
-            }
-            if (ss_images[i].anguloRot.z != 0) {
-                ss_images[i].anguloRot.z -= 3; 
-                changed = true;
-            }
-            if (ss_images[i].desl.x > -2) {
-                ss_images[i].desl.x -= 0.1;
-                changed = true;
-            }
-        } else if (i > currentPos) {
-            if (ss_images[i].anguloRot.z < 45) {
-                ss_images[i].anguloRot.z += 3;
-                changed = true;
-            }
-            if (ss_images[i].desl.y > (0.5 + i - currentPos)) {
-                ss_images[i].desl.y -= 0.05;
-                changed = true;
-            }
-        } else {
-            if (ss_images[i].anguloRot.z > -45) {
-                ss_images[i].anguloRot.z -= 3;
-                changed = true;
-            }
-            if (ss_images[i].desl.y > (-0.5 + i - currentPos)) {
-                ss_images[i].desl.y -= 0.05;
-                changed = true;
-            }
-        }
-    }
-    glutPostRedisplay();
-    if (changed)
-        glutTimerFunc(5, animation_moveRight, pos);
-    else {
-        for (int i = 0; i < ss_images.size(); i++) {
-            ss_images[i].desl.y = i < currentPos ? -0.5 + i - currentPos : 0.5 + i - currentPos;
-            ss_images[i].anguloRot.z = i < currentPos ? -45 : 45;
-            if (i == currentPos) {
-                ss_images[i].desl.x = -2;
-                ss_images[i].desl.y = 0;
-                ss_images[i].anguloRot.z = 0;
-            }
-        }
-        animationMove = false;
-    }
-}
-
-void animation_moveLeft(int pos) {
-    bool changed = false;
-    for (int i = 0; i < ss_images.size(); i++) {
-        if (i == currentPos) {
-            if (ss_images[i].desl.y < 0) {
-                ss_images[i].desl.y += 0.05;
-                changed = true;
-            }
-            if (ss_images[i].anguloRot.z != 0) {
-                ss_images[i].anguloRot.z += 3; 
-                changed = true;
-            }
-            if (ss_images[i].desl.x > -2) {
-                ss_images[i].desl.x -= 0.1;
-                changed = true;
-            }
-        } else if (i > currentPos) {
-            if (ss_images[i].anguloRot.z < 45) {
-                ss_images[i].anguloRot.z += 3;
-                changed = true;
-            }
-            if (ss_images[i].desl.y < (0.5 + i - currentPos)) {
-                ss_images[i].desl.y += 0.05;
-                changed = true;
-            }
-        } else {
-            if (ss_images[i].anguloRot.z > -45) {
-                ss_images[i].anguloRot.z -= 3;
-                changed = true;
-            }
-            if (ss_images[i].desl.y < (-0.5 + i - currentPos)) {
-                ss_images[i].desl.y += 0.05;
-                changed = true;
-            }
-            
-        }
-    }
-    glutPostRedisplay();
-    if (changed) 
-        glutTimerFunc(5, animation_moveLeft, pos);
-    else {
-        for (int i = 0; i < ss_images.size(); i++) {
-            ss_images[i].desl.y = i < currentPos ? -0.5 + i - currentPos : 0.5 + i - currentPos;
-            ss_images[i].anguloRot.z = i < currentPos ? -45 : 45;
-            if (i == currentPos) {
-                ss_images[i].desl.x = -2;
-                ss_images[i].desl.y = 0;
-                ss_images[i].anguloRot.z = 0;
-            }
-        }
-        animationMove = false;
     }
 }
 

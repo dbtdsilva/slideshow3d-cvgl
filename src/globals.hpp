@@ -18,6 +18,7 @@
 #include "effects/Effects.hpp"
 #include "utils/mathUtils.hpp"
 #include "models/graphicmodel.hpp"
+#include "visualization/theme.hpp"
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -51,4 +52,6 @@ extern bool animationActive, animationMove, animationZoom;
 extern bool cameraActive;
 extern int cameraLastEffect;
 extern VideoCapture stream;
+
+extern Theme * theme;
 #endif

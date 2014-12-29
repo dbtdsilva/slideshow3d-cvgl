@@ -24,11 +24,8 @@ GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard, btnCamera;
 GraphicModel cameraTexture;
 
 Effects matEffects;
-int currentPos;
-bool animationActive;
-bool animationMove;
-bool animationZoom;
 
 bool cameraActive;
 int cameraLastEffect = -1;
 VideoCapture stream;
+Theme * theme;
