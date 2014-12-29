@@ -230,6 +230,10 @@ void refreshCameraPanel(int value) {
         Mat cameraFrame;
         stream = VideoCapture(0);
         stream.read(cameraFrame);
+        if (!stream.isOpened()) {
+            cout << "Couldn't find any video capture source" << endl;
+            return;
+        }
         double max = cameraFrame.cols > cameraFrame.rows ? cameraFrame.cols : cameraFrame.rows;
         cameraTexture.factorEsc.y = (double) cameraFrame.cols / max;
         cameraTexture.factorEsc.z = (double) cameraFrame.rows / max;
