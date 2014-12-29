@@ -69,8 +69,10 @@ void inicializarPlanoProjeccao(void)
 
 void inicializarModelos(string path)
 {
-    theme = Coverflow::getInstance(&ss_images);
-    theme->initTheme(path);
+    themect = new ThemeController(path);
+    ss_images = themect->getImageVector();
+    theme = themect->getCurrent();
+    theme->initTheme();
 
     printf("Loading effects panels\n");
     for (int i = 0; i < matEffects.getNumberEffects(); i++) {
@@ -111,7 +113,7 @@ void inicializarModelos(string path)
     btnCamera.textureID = loadImage(projectPath + "models/camera.png", &btnCamera.image);
     btnCamera.filepath = projectPath + "models/camera.png";
     btnCamera.desl.x = -4.6;
-    btnCamera.desl.y = 0.85;
+    btnCamera.desl.y = 0;
     btnCamera.desl.z = -0.85;
     btnCamera.anguloRot.x = 0;
     btnCamera.anguloRot.y = 0;
@@ -159,8 +161,7 @@ void inicializarModelos(string path)
     btnOptions.anguloRot.y = 0;
     btnOptions.anguloRot.z = 0;
     btnOptions.factorEsc.x = 1;
-    //btnOptions.factorEsc.y = 0.08;
-    btnOptions.factorEsc.y = 0.0;   /* Hiding */
+    btnOptions.factorEsc.y = 0.08;
     btnOptions.factorEsc.z = 0.08;
 
     cout << "Creating projection" << endl;

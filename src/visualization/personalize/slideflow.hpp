@@ -5,13 +5,13 @@
  *
  */
 
-#ifndef COVERFLOW_H
-#define COVERFLOW_H
+#ifndef SLIDEFLOW_H
+#define SLIDEFLOW_H
 
 #include <string>
 #include "../theme.hpp"
 
-class Coverflow : public Theme {
+class Slideflow : public Theme {
 public:
 	static Theme* getInstance(vector<GraphicModel> *);
 
@@ -24,7 +24,7 @@ public:
 	void zoomOut(void);
 
 protected:
-	Coverflow(vector<GraphicModel> *);
+	Slideflow(vector<GraphicModel> *);
 	void animation_moveRight(int);
 	void animation_moveLeft(int);
 	void animation_moveUp(int);

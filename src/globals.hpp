@@ -18,7 +18,7 @@
 #include "effects/Effects.hpp"
 #include "utils/mathUtils.hpp"
 #include "models/graphicmodel.hpp"
-#include "visualization/theme.hpp"
+#include "visualization/themeController.hpp"
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -42,7 +42,7 @@ extern GLint attribute_coord3d, attribute_texcoord;
 extern mat4x4 matrizProj, matrizModelView;
 extern int currentPos;
 
-extern vector<GraphicModel> ss_images;
+extern vector<GraphicModel>* ss_images;
 extern vector<GraphicModel> btn_effects;
 extern Effects matEffects;
 extern GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard, btnCamera;
@@ -53,5 +53,6 @@ extern bool cameraActive;
 extern int cameraLastEffect;
 extern VideoCapture stream;
 
+extern ThemeController * themect;
 extern Theme * theme;
 #endif

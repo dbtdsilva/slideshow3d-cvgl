@@ -20,7 +20,7 @@ public:
 
 	virtual ~Theme();
 
-	virtual void initTheme(string);
+	virtual void initTheme(void);
 	virtual void pressLeft(void);
 	virtual void pressRight(void);
 	virtual void pressUp(void);

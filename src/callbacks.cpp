@@ -70,8 +70,8 @@ void myDisplay(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(programaGLSL);
-    for (int i = 0; i < ss_images.size(); i++) 
-        produceModelsShading(&ss_images[i]);
+    for (int i = 0; i < ss_images->size(); i++) 
+        produceModelsShading(&(*ss_images)[i]);
     for (int i = 0; i < btn_effects.size(); i++) 
         produceModelsShading(&btn_effects[i]);
     produceModelsShading(&cameraTexture);
@@ -149,8 +149,8 @@ void onMouse(int button, int state, int x, int y)
                         if (cameraActive) {
                             cameraLastEffect = i;
                         } else {
-                            matEffects.applyEffect(i, &ss_images[theme->currentPos].image, matEffects.requestDefaultParameters(i));
-                            ss_images[theme->currentPos].textureID = loadImage(&ss_images[theme->currentPos].image);
+                            matEffects.applyEffect(i, &(*ss_images)[theme->currentPos].image, matEffects.requestDefaultParameters(i));
+                            (*ss_images)[theme->currentPos].textureID = loadImage(&(*ss_images)[theme->currentPos].image);
                         }
                     }
                 }
@@ -161,17 +161,18 @@ void onMouse(int button, int state, int x, int y)
                     saveImage("../savedImages/cameraShot.jpg", cameraTexture.image);
                     cout << "Saved file as: ../savedImages/cameraShot.jpg" << endl;
                 } else {
-                    string s = ss_images[theme->currentPos].filepath;
+                    string s = (*ss_images)[theme->currentPos].filepath;
                     string::size_type i = s.rfind('.', s.length());
                     if (i != string::npos)
                         s.replace(i, 0, "_output");
                     s = "../savedImages/" + string(basename(s.c_str()));
-                    saveImage(s, ss_images[theme->currentPos].image);
+                    saveImage(s, (*ss_images)[theme->currentPos].image);
                     cout << "Saved file as: " << s << endl;
                 }
                 
             } else if (!cameraActive && checkButtonClick(posY, posZ, &btnOptions)) {
-                printf("Pressed options button\n");
+                theme = themect->next();
+                theme->initTheme();
             } else if (checkButtonClick(posY, posZ, &btnCamera)) {
                 if (cameraActive) {
                     cameraActive = false;
@@ -184,8 +185,8 @@ void onMouse(int button, int state, int x, int y)
                     cameraActive = true;                   
                 }
             } else if (!cameraActive && checkButtonClick(posY, posZ, &btnDiscard)) {
-                ss_images[theme->currentPos].image = ss_images[theme->currentPos].original;
-                ss_images[theme->currentPos].textureID = loadImage(&ss_images[theme->currentPos].image);
+                (*ss_images)[theme->currentPos].image = (*ss_images)[theme->currentPos].original;
+                (*ss_images)[theme->currentPos].textureID = loadImage(&(*ss_images)[theme->currentPos].image);
             }
             break;
     }
@@ -211,6 +212,10 @@ void refreshCameraPanel(int value) {
         Mat cameraFrame;
         stream = VideoCapture(0);
         stream.read(cameraFrame);
+        if (!stream.isOpened()) {
+            cout << "Couldn't find any video capture source" << endl;
+            return;
+        }
         double max = cameraFrame.cols > cameraFrame.rows ? cameraFrame.cols : cameraFrame.rows;
         cameraTexture.factorEsc.y = (double) cameraFrame.cols / max;
         cameraTexture.factorEsc.z = (double) cameraFrame.rows / max;

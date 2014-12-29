@@ -34,7 +34,7 @@ void Theme::staticAnimation_moveDown(int pos) { instance->animation_moveDown(pos
 void Theme::staticAnimation_zoomIn(int pos) { instance->animation_zoomIn(pos); }
 void Theme::staticAnimation_zoomOut(int pos) { instance->animation_zoomOut(pos); }
 
-void Theme::initTheme(string path) {}
+void Theme::initTheme(void) {}
 void Theme::pressLeft(void) {}
 void Theme::pressRight(void) {}
 void Theme::pressUp(void) {}
