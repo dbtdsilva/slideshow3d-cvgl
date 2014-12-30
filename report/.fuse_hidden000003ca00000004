@@ -1,0 +1,217 @@
+%
+% General structure for the revdetua class:
+%
+\documentclass[portugues,final]{revdetua}
+\usepackage[portuguese]{babel}
+\usepackage{listingsutf8}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{color}
+\usepackage{eurosym}
+%
+% Valid options are:
+%
+%   longpaper --------- \part and \tableofcontents defined
+%   shortpaper -------- \part and \tableofcontents not defined (default)
+%
+%   english ----------- main language is English (default)
+%   portugues --------- main language is Portuguese
+%
+%   draft ------------- draft version
+%   final ------------- final version (default)
+%
+%   times ------------- use times (postscript) fonts for text
+%
+%   mirror ------------ prints a mirror image of the paper (with dvips)
+%
+%   visiblelabels ----- \SL, \SN, \SP, \EL, \EN, etc. defined
+%   invisiblelabels --- \SL, \SN, \SP, \EL, \EN, etc. not defined (default)
+%
+% Note: the final version should use the times fonts
+% Note: the really final version should also use the mirror option
+%
+
+\begin{document}
+
+% Note: the month must be in Portuguese
+
+\title{\textbf{Álbum de fotos 3D implementado com OpenCV e OpenGL} \\ Computação Visual\\Universidade de Aveiro}
+\author{Diogo Silva 60337}
+\maketitle
+\begin{resumo} % Note: in Portuguese
+Este relatório descreve detalhadamente a estrutura, filtros e o motor da aplicação implementada em OpenGL e OpenCV.
+Descrevendo detalhadamente, método de manipulação, método de visualização, entre outros.
+\end{resumo}
+
+%\begin{palavraschave} % Note: in Portuguese (optional)
+%\end{palavraschave}
+
+\section{Estrutura da Aplicação}
+
+A aplicação está organizada de forma a ser reutilizável, sendo assim, existe várias componentes distintas:
+\begin{enumerate}
+\item Efeitos, manipulação de cada imagem, mais precisamente, aplicação de filtros sobre imagens, tendo um modo personalizado ou com valores de entrada por defeito
+\item Modelos, contém todas as caracterísiticas necessárias para a representação de um modelo no ambiente OpenGL
+\item Shaders, trata do fazer o processamento respectivo na placa gráfica
+\item Utilidades, contém as utilidades para o sistema, neste momento, contém apenas MathUtils que permite manipular matrizes e vectores
+\item Visualizador Gráfico (animações), manipulação de vários modelos para criar animações, contendo as respectivas acções, como primir um botão
+\end{enumerate}
+
+Podendo assim facilmente adicionar um tema gráfico com novas animações, ou adicionar novos filtros ao sistema.
+
+\subsection{Implementação}
+
+\subsubsection{Efeitos}
+
+Nesta secção é abordado a implementação da estrutura efeitos e não o detalhe de cada filtro, esse assunto é abordado na secção de Aspectos Importantes do Trabalho.
+
+A class {\tt Effect} no ficheiro {\tt effects/effect.{h|c}pp} contém a interface usada por qualquer efeito, sendo que cada filtro vai ter de herdar esta classe de forma a ficar um sistema escalável, sendo que a função principal desta classe é a {\tt ApplyEffect} que faz a respectiva manipulação de cada imagem consoante o filtro de que se trata.
+
+Como se pode ver na imagem seguinte:
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=200pt]{images/effect.png}}
+\caption{Implementação do Effect}
+\label{img:complete}
+\end{figure}
+
+Para além desta classe, ainda existe outra classe que permite armazenar todos os filtros existentes fazendo a manipulação deles a partir dela, tendo a mesma a função {\tt ApplyEffect} mas com um campo adicional que indica o filtro respectivo.
+
+Esta classe armazena todos os filtros existentes na sua construção (ou seja, no construtor), armazenando-os todos num vector de Effect fazendo assim proveito do polimorfismo.
+
+Como se pode ver na imagem seguinte esta classe é muito parecido à {\tt Effect} com a excepção que tem um vector de Effect.
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=230pt]{images/effects.png}}
+\caption{Implementação do Effects}
+\label{img:complete}
+\end{figure}
+
+\subsubsection{Modelos}
+
+Todos os modelos que precisam de ser representados em OpenGL são carregados para uma classe chamada {\tt GraphicModel} que permite guardar a seguinte informação:
+\begin{enumerate}
+\item{Número de vertíces}
+\item{Lista de vertíces}
+\item{Lista das normais}
+\item{Lista das texturas}
+\item{Matrix da imagem representada}
+\item{Matrix da imagem carregada inicialmente}
+\item{Valores de deslocamento, rotação e de redimensionamento}
+\item{ID da textura actual}
+\end{enumerate}
+
+Como se pode verificar na imagem seguinte:
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=100pt]{images/graphicmodel.png}}
+\caption{Implementação do GraphicModel}
+\label{img:complete}
+\end{figure}
+
+Em que estes dados todos são úteis para a representação no modelo no ambiente gráfico, a excepção da Matrix inicial carregada que serve para dar a possibilidade ao utilizador de voltar a imagem inicial.
+
+\subsubsection{Controlador de temas}
+
+Tal como nos efeitos, para os temas da representação gráfica existe uma classe que funciona como uma interface que permite criar outros temas herdando essa classe, que é a {\tt Theme} no ficheiro {\tt visualization/theme.{h|c}pp}.
+
+Essa classe tem todas as funções respectivas aos movimentos básicos, tais como, mover o tema para a direita, para a esquerda, para baixo, ampliar, entre os restantes. Para a implementação de cada tema é passado os modelos gráficos de todas as imagens carregadas do directório, sendo esta classe responsável pela manipulação das suas respectivas deslocações e orientações.
+
+Como se pode ver na imagem seguinte, temos a interface pronta a ser herdada por qualquer tema que se pretenda que seja criado.
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=230pt]{images/theme.png}}
+\caption{Implementação do Effect}
+\label{img:complete}
+\end{figure}
+
+Sendo que tanto o tema Coverflow, ou Slideflow herdam esta classe.
+
+Para além desta classe, ainda temos um controlador de temas que permite manusear todos os temas introduzidos no sistemas, tendo como um vector de {\tt Theme}, tal como acontecia com a classe {\tt Effects}.
+
+Criando assim abstração ao utilizador da manipulação do vector, precisando apenas de fazer {\tt next()} no objecto {\tt ThemeController}.
+
+\section{Aspectos Importantes do Trabalho}
+
+\subsection{Filtros}
+
+\subsubsection{Canny}
+\subsubsection{Cartoon}
+\subsubsection{Troca de Canais}
+\subsubsection{Flood filling}
+\subsubsection{Tons de cinza}
+\subsubsection{Iluminação}
+\subsubsection{Lomo}
+\subsubsection{Sepia}
+\subsubsection{Saturation}
+\subsubsection{Sepia}
+\subsubsection{Vignette}
+
+\subsection{Interacção com o utilizador}
+
+\subsubsection{Clique nas peças do Xadrez (Interacção Directa)}
+
+\subsubsection{Manipulação do cenário}
+
+\subsection{Iluminação na Placa Gráfica}
+
+\subsection{Texturas}
+
+\subsection{Skybox}
+
+\subsection{Representação Gráfica}
+
+\subsubsection{Movimentos possíveis das peças}
+
+\subsubsection{Peças mortas}
+
+\section{Resultado Final}
+
+\section{Compilação e Execução}
+
+Código fonte disponível em:
+
+{\tt \url{https://github.com/dbtds/chess-opengl}}
+
+Podendo ser obtido através do comando: {\tt git clone https://github.com/dbtds/slideshow3d-cvgl.git}
+
+Este projecto foi desenvolvido unicamente em ambiente Linux, sendo assim, não foi criado qualquer ficheiro executável para ambiente Windows, apesar que também é possível faze-lo alterando apenas a forma de compilação.\\
+
+Note-se que todas as próximas indicações foram apenas realizadas em ambiente Linux no Ubuntu 14.04 64 bits.\\
+
+Software essencial para compilar e correr o programa:
+\begin{enumerate}
+\item build-essential
+\item qt4-qmake
+\item libglew-dev
+\item freeglut3-dev
+\item libboost-system-dev
+\item libboost-filesystem-dev
+\item opencv (pode-se ter que compilar esta biblioteca a partir do source)
+
+\end{enumerate}
+
+Para obter cada dependência basta executar:
+
+{\tt sudo apt-get install dependency\_name}
+
+Após a obtenção de todas estas dependências, basta executar o Makefile na pasta principal (root).
+
+Executando em bash {\tt / \$ make}
+
+Para executar o programa, basta ir a pasta gerada bin, e correr o executável com o nome chess.
+Executando em bash {\tt /bin \$ ./slideshow3d example\_images/}
+
+Já existe um executável pré-gerado apenas para 64 bits dentro da pasta bin com o nome chess\_bin64, executando da mesma forma:
+Em bash {\tt /bin \$ ./slideshow3d\_bin64 example\_images/}
+
+
+\bibliography{report} % use a field named url or \url{} for URLs
+%\url{www.ua.pt}
+% Note: the \bibliographystyle is set automatically
+
+\end{document}

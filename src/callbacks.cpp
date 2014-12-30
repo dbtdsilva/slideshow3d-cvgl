@@ -158,7 +158,7 @@ void onMouse(int button, int state, int x, int y)
                 if (checkButtonClick(posY, posZ, &btn_effectsCustom[i], false)) {
                     if (i < matEffects.getNumberEffects()) {
                         if (cameraActive) {
-                            cameraLastEffect = i;
+                            cameraLastEffect = atoi(btn_effectsCustom[i].filepath.c_str());
                         } else {
                             int index = atoi(btn_effectsCustom[i].filepath.c_str());
                             matEffects.applyEffect(
@@ -260,7 +260,10 @@ void refreshCameraPanel(int value) {
             matEffects.applyEffect(cameraLastEffect, &cameraTexture.image, matEffects.requestDefaultParameters(cameraLastEffect));
         }       
         cameraTexture.textureID = loadImage(&cameraTexture.image);
-        glutTimerFunc(30, refreshCameraPanel, 0);
+        if (cameraLastEffect > -1)
+            glutTimerFunc(100, refreshCameraPanel, 0);
+        else
+            glutTimerFunc(30, refreshCameraPanel, 0);
     } 
     glutPostRedisplay();
 }
