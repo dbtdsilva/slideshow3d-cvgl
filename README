@@ -1,0 +1,30 @@
+slideshow3d-cvgl
+================
+
+Código fonte disponível em: https://github.com/dbtds/slideshow3d-cvgl
+Podendo ser obtido através do comando: git clone https://github.com/dbtds/slideshow3d-cvgl.git
+
+Este projecto foi desenvolvido unicamente em ambiente Linux, sendo assim, não foi criado qualquer ficheiro executável para ambiente Windows, apesar que também é possível faze-lo alterando apenas a forma de compilação.
+
+Note-se que todas as próximas indicações foram apenas realizadas em ambiente Linux no Ubuntu 14.04 64 bits.
+
+Software essencial para compilar e correr o programa:
+* build-essential
+* qt4-qmake
+* libglew-dev
+* freeglut3-dev
+* libboost-system-dev
+* libboost-filesystem-dev
+* opencv
+
+Para obter cada dependência basta executar:
+sudo apt-get install nome_da_dependencia_aqui
+
+Após a obtenção de todas estas dependências, basta executar o Makefile na pasta principal (root).
+Executando em bash /$ make
+
+Para executar o programa, basta ir a pasta gerada bin, e correr o executável com o nome chess.
+Executando em bash /bin$ ./slideshow3d example_images/
+
+Já existe um executável pré-gerado dentro da pasta bin com o nome chess_bin64, executando da mesma forma:
+Em bash /bin$ ./slideshow3d_bin64 example_images/
