@@ -19,7 +19,7 @@ GLint attribute_coord3d, attribute_texcoord;
 mat4x4 matrizProj, matrizModelView;
 
 vector<GraphicModel>* ss_images;
-vector<GraphicModel> btn_effects;
+vector<GraphicModel> btn_effects, btn_effectsCustom;
 GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard, btnCamera;
 GraphicModel cameraTexture;
 

@@ -21,7 +21,7 @@ using namespace std;
 class Lomo : public Effect {
 
 public:
-	Lomo(string imagepath) : Effect(imagepath) {}
+	Lomo(string imagepath) : Effect(imagepath, false) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3) {

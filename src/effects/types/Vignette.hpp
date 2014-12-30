@@ -22,7 +22,7 @@ using namespace std;
 class Vignette : public Effect {
 
 public:
-	Vignette(string imagepath) : Effect(imagepath) {}
+	Vignette(string imagepath) : Effect(imagepath, true) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3)

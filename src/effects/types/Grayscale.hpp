@@ -21,7 +21,7 @@ using namespace std;
 class Grayscale : public Effect {
 
 public:
-	Grayscale(string imagepath) : Effect(imagepath) {}
+	Grayscale(string imagepath) : Effect(imagepath, false) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3)

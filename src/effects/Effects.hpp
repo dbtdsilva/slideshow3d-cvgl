@@ -22,6 +22,7 @@ public:
 	string getPreviewImagePath(unsigned int effectNumber);
 	string getEffectName(unsigned int effectNumber);
 	Mat applyEffect(unsigned int effectNumber, Mat*, vector<void*> arg);
+	bool hasCustomVersion(unsigned int);
 	vector<void*> requestDefaultParameters(unsigned int effectNumber);
 	vector<void*> readParameters(unsigned int effectNumber);
 

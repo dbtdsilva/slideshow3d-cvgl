@@ -21,7 +21,7 @@ using namespace std;
 class FloodFilling : public Effect {
 
 public:
-	FloodFilling(string imagepath) : Effect(imagepath) {}
+	FloodFilling(string imagepath) : Effect(imagepath, true) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		Mat image_out = in.clone();

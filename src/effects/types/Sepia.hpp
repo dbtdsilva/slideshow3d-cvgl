@@ -20,7 +20,7 @@ using namespace cv;
 class Sepia : public Effect {
 
 public:
-	Sepia(string imagepath) : Effect(imagepath) {}
+	Sepia(string imagepath) : Effect(imagepath, false) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3) {

@@ -21,7 +21,7 @@ using namespace std;
 class CannyE : public Effect {
 
 public:
-	CannyE(string imagepath) : Effect(imagepath) {}
+	CannyE(string imagepath) : Effect(imagepath, true) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		Mat image_out;

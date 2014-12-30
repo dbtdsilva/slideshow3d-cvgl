@@ -19,7 +19,7 @@
 
 using namespace std;
 
-bool checkButtonClick(double, double, GraphicModel*);
+bool checkButtonClick(double, double, GraphicModel*, bool=true);
 void animation_buttonPressed(int);
 void refreshCameraPanel(int);
 
@@ -74,6 +74,8 @@ void myDisplay(void)
         produceModelsShading(&(*ss_images)[i]);
     for (int i = 0; i < btn_effects.size(); i++) 
         produceModelsShading(&btn_effects[i]);
+    for (int i = 0; i < btn_effectsCustom.size(); i++) 
+        produceModelsShading(&btn_effectsCustom[i]);
     produceModelsShading(&cameraTexture);
     produceModelsShading(&btnSave);
     produceModelsShading(&btnOptions);
@@ -151,6 +153,25 @@ void onMouse(int button, int state, int x, int y)
             glReadPixels(x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
             gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
+            bool pressed = false;
+            for (int i = 0; i < btn_effectsCustom.size(); i++) {
+                if (checkButtonClick(posY, posZ, &btn_effectsCustom[i], false)) {
+                    if (i < matEffects.getNumberEffects()) {
+                        if (cameraActive) {
+                            cameraLastEffect = i;
+                        } else {
+                            int index = atoi(btn_effectsCustom[i].filepath.c_str());
+                            matEffects.applyEffect(
+                                index, 
+                                &(*ss_images)[theme->currentPos].image, 
+                                matEffects.readParameters(index));
+                            (*ss_images)[theme->currentPos].textureID = loadImage(&(*ss_images)[theme->currentPos].image);
+                        }
+                    }
+                    pressed = true;
+                }
+            }
+            if (pressed) break;
             for (int i = 0; i < btn_effects.size(); i++) {
                 if (checkButtonClick(posY, posZ, &btn_effects[i])) {
                     if (i < matEffects.getNumberEffects()) {
@@ -161,9 +182,10 @@ void onMouse(int button, int state, int x, int y)
                             (*ss_images)[theme->currentPos].textureID = loadImage(&(*ss_images)[theme->currentPos].image);
                         }
                     }
+                    pressed = true;
                 }
             }
-            
+            if (pressed) break;
             if (checkButtonClick(posY, posZ, &btnSave)) {
                 if (cameraActive) {
                     saveImage("../savedImages/cameraShot.jpg", cameraTexture.image);
@@ -200,12 +222,13 @@ void onMouse(int button, int state, int x, int y)
     }
     glutPostRedisplay();
 }
-bool checkButtonClick(double posY, double posZ, GraphicModel *obj) {
+bool checkButtonClick(double posY, double posZ, GraphicModel *obj, bool animation) {
     if (posZ < obj->desl.z + obj->factorEsc.z && posZ > obj->desl.z - obj->factorEsc.z
         && posY < obj->desl.y + obj->factorEsc.y && posY > obj->desl.y - obj->factorEsc.y)
     {
         btnPressed = obj;
-        glutTimerFunc(20, animation_buttonPressed, 1);
+        if (animation)
+            glutTimerFunc(20, animation_buttonPressed, 1);
         return true;
     }
     return false;

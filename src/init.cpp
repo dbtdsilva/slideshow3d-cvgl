@@ -92,6 +92,26 @@ void inicializarModelos(string path)
         obj.factorEsc.y = 0.12;
         obj.factorEsc.z = 0.06;
         btn_effects.push_back(obj);
+
+        if (matEffects.hasCustomVersion(i)) {
+            GraphicModel panel;
+            lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
+                        &panel.numVertices, &panel.arrayVertices, &panel.arrayTextures);
+            panel.textureID = loadImage(projectPath + "models/more.png", &panel.image);
+            ostringstream convert;
+            convert << i;
+            panel.filepath = convert.str();
+            panel.desl.x = -4.65;
+            panel.desl.y = -0.5 + (i/2) * 0.25;
+            panel.desl.z = i % 2 == 0 ? 0.78 : 0.92;
+            panel.anguloRot.x = 0;
+            panel.anguloRot.y = 0;
+            panel.anguloRot.z = 0;
+            panel.factorEsc.x = 1;
+            panel.factorEsc.y = 0.03;
+            panel.factorEsc.z = 0.03;
+            btn_effectsCustom.push_back(panel);
+        }
     }
     lerVerticesDeFicheiro(projectPath + "models/cover.obj", 
                         &cameraTexture.numVertices, &cameraTexture.arrayVertices, &cameraTexture.arrayTextures);

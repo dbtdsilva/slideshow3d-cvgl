@@ -23,7 +23,7 @@ using namespace std;
 class Pencil : public Effect {
 
 public:
-	Pencil(string imagepath) : Effect(imagepath) {}
+	Pencil(string imagepath) : Effect(imagepath, true) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3)

@@ -47,6 +47,9 @@ unsigned int Effects::getNumberEffects() {
 string Effects::getEffectName(unsigned int effectNumber) {
 	return list[effectNumber]->getEffectName();
 }
+bool Effects::hasCustomVersion(unsigned int effectNumber) {
+	return list[effectNumber]->custom;
+}
 string Effects::getPreviewImagePath(unsigned int effectNumber) {
 	return list[effectNumber]->getPreviewImagePath();
 }

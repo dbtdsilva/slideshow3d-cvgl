@@ -44,6 +44,7 @@ extern int currentPos;
 
 extern vector<GraphicModel>* ss_images;
 extern vector<GraphicModel> btn_effects;
+extern vector<GraphicModel> btn_effectsCustom;
 extern Effects matEffects;
 extern GraphicModel btnSave, btnOptions, *btnPressed, btnDiscard, btnCamera;
 extern GraphicModel cameraTexture;

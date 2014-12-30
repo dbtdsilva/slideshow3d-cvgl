@@ -21,7 +21,7 @@ using namespace std;
 class ChannelSwitch : public Effect {
 
 public:
-	ChannelSwitch(string imagepath) : Effect(imagepath) {}
+	ChannelSwitch(string imagepath) : Effect(imagepath, false) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3) {

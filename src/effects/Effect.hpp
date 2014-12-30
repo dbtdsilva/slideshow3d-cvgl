@@ -19,7 +19,7 @@ using namespace cv;
 
 class Effect {
 public:
-	Effect(string previewImage);
+	Effect(string previewImage, bool);
 	~Effect();
 
 	string getPreviewImagePath();
@@ -27,6 +27,7 @@ public:
 	virtual string getEffectName();
 	virtual vector<void*> readParameters();
 	virtual vector<void*> requestDefaultParameters();
+	bool custom;
 private:
 	string image;
 	string effectName;

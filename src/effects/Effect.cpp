@@ -9,8 +9,9 @@
 #include <iostream>
 using namespace cv;
 
-Effect::Effect(string previewImage) {
+Effect::Effect(string previewImage, bool custom) {
 	this->image = previewImage;
+	this->custom = custom;
 }
 Effect::~Effect() {}
 

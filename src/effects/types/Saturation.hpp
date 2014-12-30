@@ -22,7 +22,7 @@ using namespace std;
 class Saturation : public Effect {
 
 public:
-	Saturation(string imagepath) : Effect(imagepath) {}
+	Saturation(string imagepath) : Effect(imagepath, true) {}
 
 	Mat applyEffect(Mat in, vector<void*> args) {
 		if (in.channels() < 3)
